@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Andrey Potetiurin"]
   spec.email         = ["potetiurin@gmail.com"]
   spec.summary       = "Rails plugin for work with some modification of BEM methodology"
-  spec.description   = %q{TODO: Write a longer description. Optional.}
+  spec.description   = "Gem helps build UI with blocks approach"
   spec.homepage      = ""
   spec.license       = "MIT"
 
