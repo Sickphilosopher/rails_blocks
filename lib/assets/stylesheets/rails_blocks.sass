@@ -1,0 +1,41 @@
+$bemBlockPrefix: 'b-'
+$bemElementSeparator: '__' 
+$bemModifierSeparator: '--'
+
+@function selectorToString($selector)
+	$selector: inspect($selector) //cast to string
+	$selector: str-slice($selector, 2, -2) //remove bracket
+	@return $selector
+
+@function containsModifier($selector)
+	$selector: selectorToString($selector)
+	@if str-index($selector, $bemModifierSeparator)
+		@return true
+	@else
+		@return false
+		
+@function getBlock($selector)
+	$selector: selectorToString($selector)
+	$modifierStart: str-index($selector, $bemModifierSeparator)-1
+	@return str-slice($selector, 0, $modifierStart)
+
+=b($block)
+	.#{$bemBlockPrefix+$block}
+		@content
+		
+=e($element)
+	$selector: &
+	@at-root
+		@if containsModifier($selector)
+			$block: getBlock($selector)
+			#{$selector}
+				#{$block+$bemElementSeparator+$element}
+					@content
+		@else
+			#{$selector+$bemElementSeparator+$element}
+				@content
+
+=m($modifier)
+	@at-root
+		#{&}#{$bemModifierSeparator+$modifier}
+			@content
