@@ -10,7 +10,6 @@ module RailsBlocks
 	
 	class << self
 		attr_writer :config
-		
 	end
 	
 	def self.config
