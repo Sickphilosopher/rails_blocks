@@ -1,5 +1,3 @@
-#=require 'block'
-
 $ ->
 	$.extend $,
 		RB: 
