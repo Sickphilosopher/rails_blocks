@@ -7,7 +7,7 @@ module RailsBlocks
 		end
 		
 		initializer 'rails_blocks.precompile', :group => :all do |app|
-			app.config.assets.precompile += ['rails_blocks.coffee']
+			app.config.assets.precompile += ['rails_blocks.js']
 		end
 		
 		ActiveSupport.on_load :action_view do
