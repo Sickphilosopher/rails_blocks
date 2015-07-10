@@ -6,10 +6,13 @@ require 'rails_blocks/engine' if defined?(Rails)
 
 module RailsBlocks
 	BLOCKS = []
-	include RailsBlocks::Path
+	LEVELS = []
 	
+	include RailsBlocks::Path
+		
 	class << self
 		attr_writer :config
+		attr_accessor :test
 	end
 	
 	def self.config
@@ -26,5 +29,9 @@ module RailsBlocks
 	
 	def self.reset
 		@config = Configuration.new
+	end
+	
+	def self.add_level(level)
+		@LEVELS << level
 	end
 end

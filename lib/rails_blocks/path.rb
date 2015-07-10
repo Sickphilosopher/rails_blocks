@@ -19,5 +19,15 @@ module RailsBlocks
 		def assets_path
 			@assets_path ||= File.join gem_path, 'assets'
 		end
+		
+		def blocks_dir
+			Rails.root.join RailsBlocks.config.blocks_dir
+		end
+		
+		def template_exists?(file)
+			RailsBlocks.LEVELS.reverse.each do |level|
+				return true if File.exists? File.join(blocks_dir, level, file + '.slim')
+			end
+		end
 	end
 end
