@@ -11,7 +11,6 @@ module RailsBlocks
 		
 	class << self
 		attr_writer :config
-		attr_accessor :test
 	end
 	
 	def self.config
@@ -19,11 +18,11 @@ module RailsBlocks
 	end
 	
 	def self.configure
-		yield(config)
+		yield config
 	end
 	
 	def self.get_block(b_name)
-		Blocks::Block.new(b_name)
+		Blocks::Block.new b_name
 	end
 	
 	def self.reset
