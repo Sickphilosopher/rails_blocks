@@ -10,10 +10,13 @@ module RailsBlocks
 			app.config.assets.precompile += %w( rails_blocks.js )
 		end
 		
-		include RailsBlocks::Levels
 		config.to_prepare do
-			RailsBlocks::Levels.get_levels
 			ApplicationController.helper(BlockHelper)
+		end
+		
+		ActiveSupport.on_load :action_controller do
+			include RailsBlocks::Levels
+			before_filter :add_view_paths
 		end
 	end
 end

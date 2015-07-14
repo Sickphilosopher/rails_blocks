@@ -4,14 +4,14 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'rails_blocks/version'
 
 Gem::Specification.new do |spec|
-	spec.name					= "rails_blocks"
+	spec.name					= 'rails_blocks'
 	spec.version			 = RailsBlocks::VERSION
-	spec.authors			 = ["Andrey Potetiurin"]
-	spec.email				 = ["potetiurin@gmail.com"]
-	spec.summary			 = "Rails plugin for work with some modification of BEM methodology"
-	spec.description	 = "Gem helps build UI with blocks approach"
-	spec.homepage			= ""
-	spec.license			 = "MIT"
+	spec.authors			 = ['Andrey Potetiurin']
+	spec.email				 = ['potetiurin@gmail.com']
+	spec.summary			 = 'Rails plugin for work with some modification of BEM methodology'
+	spec.description	 = 'Gem helps build UI with blocks approach'
+	spec.homepage			= ''
+	spec.license			 = 'MIT'
 
 	spec.files				 = `git ls-files -z`.split("\x0")
 	spec.executables	 = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
@@ -21,13 +21,13 @@ Gem::Specification.new do |spec|
 	spec.add_runtime_dependency 'rails', '~> 4.2', '>= 4.2.2'
 	spec.add_development_dependency 'bundler', '~> 1.7'
 	spec.add_development_dependency 'rake', '~> 10.0'
-	spec.add_development_dependency 'rspec', '~> 0'
-	spec.add_development_dependency 'rspec-nc', '~> 0'
+	spec.add_development_dependency 'rspec'
+	spec.add_development_dependency 'rspec-nc'
 	spec.add_development_dependency 'rspec-rails', '~> 3.0'
-	spec.add_development_dependency 'memfs', '~> 0'
-	spec.add_development_dependency 'guard', '~> 0'
-	spec.add_development_dependency 'guard-rspec', '~> 0'
-	spec.add_development_dependency 'pry', '~> 0'
-	spec.add_development_dependency 'pry-remote', '~> 0'
-	spec.add_development_dependency 'pry-nav', '~> 0'
+	spec.add_development_dependency 'memfs'
+	spec.add_development_dependency 'guard'
+	spec.add_development_dependency 'guard-rspec'
+	spec.add_development_dependency 'pry'
+	spec.add_development_dependency 'pry-remote'
+	spec.add_development_dependency 'pry-nav'
 end

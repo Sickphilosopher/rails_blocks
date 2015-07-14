@@ -30,6 +30,11 @@ guard :rspec, cmd: "bundle exec rspec" do
 		puts m[1]
 		"spec/#{m[1]}_spec.rb"
 	end
+	
+	watch(%r{^app/(.+).rb$}) do |m|
+		puts m[1]
+		"spec/#{m[1]}_spec.rb"
+	end
 
 	# watch /spec/ files
 	watch(%r{^spec/(.+).rb$}) do |m|
