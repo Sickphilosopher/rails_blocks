@@ -4,12 +4,12 @@ module BlockHelper
 		dir = b_name
 		filename = b_name
 		dir, filename = add_mods(dir, filename, options)
-		target = [dir, filename].join('/').gsub!('-', '_')
+		target = [dir, filename].join('/').gsub('-', '_')
 		# block = RailsBlocks.get_block b_name
 		# block.render.html_safe
 		#dir.to_s
 		
-		template_exists?(target) ? render(file: target) : empty
+		template_exists?(target) ? render(file: target) : target.to_s
 	end
 	
 	def empty

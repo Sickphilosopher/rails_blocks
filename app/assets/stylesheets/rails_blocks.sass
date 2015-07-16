@@ -43,3 +43,12 @@ $bemModifierSeparator: '--'
 	@at-root
 		#{&}#{$bemModifierSeparator+$modifier}
 			@content
+			
+=icons-m($modifiers, $width, $height)
+	@for $i from 1 through length($modifiers)
+		+m(nth($modifiers, $i))
+			background-position: -($i - 1) * $width (0)
+			&:hover
+				background-position: -($i - 1)*$width (-$height)
+			&:active
+				background-position: -($i - 1) * $width (-2 * $height)

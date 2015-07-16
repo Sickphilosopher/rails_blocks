@@ -28,6 +28,7 @@ module RailsBlocks
 			RailsBlocks.config.levels.reverse.each do |level|
 				return true if File.exists? File.join(blocks_dir, level, file + '.slim')
 			end
+			return false
 		end
 	end
 end
