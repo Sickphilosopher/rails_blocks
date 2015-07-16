@@ -16,6 +16,10 @@ module BlockHelper
 		'test empty'
 	end
 	
+	def this
+		{tag: 'test', attrs: {class: 'test-class', boo: 'test-boo'}}
+	end
+	
 	private
 		def add_mods(dir, filename, options = {})
 			unless(options[:mods].nil?)
