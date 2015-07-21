@@ -1,6 +1,8 @@
 module BlockHelper
 	include RailsBlocks::Path
-	def b(b_name, options = {})
+	include RailsBlocks::Blocks
+	def b(b_name, options = {}, &block)
+		
 		dir = b_name
 		filename = b_name
 		dir, filename = add_mods(dir, filename, options)
@@ -9,7 +11,10 @@ module BlockHelper
 		# block.render.html_safe
 		#dir.to_s
 		
+		Slim::Template.new{ ".test\n	| test"}.render
 		template_exists?(target) ? render(file: target) : target.to_s
+		block = Block.new('')
+		block.render
 	end
 	
 	def empty
