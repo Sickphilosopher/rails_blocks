@@ -69,7 +69,8 @@ module BlockHelper
 		end
 		
 		def mix_class(mix)
-			element_class(mix[:b], mix[:e])
+			#todo сделать очевиднее
+			element_class(@blocks_stack[@blocks_stack.length - 2], mix[:e])
 		end
 		
 		def block_class(b_name)
