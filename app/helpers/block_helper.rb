@@ -10,9 +10,9 @@ module BlockHelper
 			@content = capture(&block)
 		end
 		
-		
 		@attrs = {}
 		@attrs[:class] = block_classes b_name, options
+		@attrs.merge! options[:attrs] if options[:attrs]
 		
 		if template.nil?
 			result = empty
