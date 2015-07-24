@@ -1,6 +1,6 @@
 module BlockHelper
 	include RailsBlocks::Path
-
+	BEM_KEYS = [:tag, :class, :attrs, :mods, :mix]
 	def b(b_name, options = {}, &block)
 		@blocks_stack = @blocks_stack || []
 		
@@ -9,8 +9,7 @@ module BlockHelper
 		klass = block_classes b_name, options #eval before change context block
 		@blocks_stack.push(b_name)
 	
-		@content = capture(&block) if block_given?
-		
+		@content = block_given? ? capture(&block) : nil
 		@attrs = {}
 		@attrs[:class] = klass
 		@attrs.merge! options[:attrs] if options[:attrs]
@@ -26,7 +25,7 @@ module BlockHelper
 	end
 	
 	def e(e_name, options = {}, &block)
-		@content = capture(&block) if block_given?
+		@content = block_given? ? capture(&block) : nil
 		@attrs = {class: element_classes(@blocks_stack.last, e_name, options)}
 		@attrs[:tag] = options[:tag] || 'div'
 		
@@ -62,12 +61,11 @@ module BlockHelper
 			classes.join(' ')
 		end
 	
-		def add_mods(block_dir, b_name, mods)
+		def add_mods(b_name, mods)
 			mod, value = mods.first
 			mod_s = "_#{mod.to_s}_#{value.to_s}"
-			dir = File.join block_dir, mod_s
 			filename = b_name + mod_s
-			return dir, filename
+			return filename
 		end
 		
 		def mods_classes(base_class, mods)
@@ -75,12 +73,8 @@ module BlockHelper
 		end
 		
 		def mix_class(mix)
-			#todo сделать очевиднее
-			if mix[:e].is_a? Array
-				mix[:e].map {|e| element_class(@blocks_stack.last, e)}.join(' ')
-			else
-				element_class(@blocks_stack.last, mix[:e].to_s)
-			end
+			mix[:e] = [mix[:e]] unless mix[:e].is_a? Array
+			mix[:e].map {|e| element_class(@blocks_stack.last, e.to_s)}.join(' ')
 		end
 		
 		def block_class(b_name)
@@ -96,8 +90,8 @@ module BlockHelper
 			return nil if block_dir.nil?
 			
 			unless options[:mods].nil?
-				block_dir_with_mod, filename = add_mods(block_dir, b_name, options[:mods])
-				path = File.join block_dir_with_mod, filename + RailsBlocks.config.template_engine
+				filename = add_mods(b_name, options[:mods])
+				path = File.join block_dir, filename + RailsBlocks.config.template_engine
 				if File.exists? path
 					return path
 				end

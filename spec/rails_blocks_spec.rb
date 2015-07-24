@@ -1,4 +1,5 @@
 require 'rails_blocks'
+require 'rails'
 
 describe RailsBlocks do
 	describe ".configure" do
@@ -13,12 +14,10 @@ describe RailsBlocks do
 		
 		it "set path for blocks folder" do
 			RailsBlocks.configure do |config|
-				config.blocks_path = 'bem'
+				config.blocks_dir = 'bem'
 			end
 			
-			include RailsBlocks::Path
-			root_path = Rails.root
-			expect(blocks_path).to be(root_path + '/bem')
+			expect(RailsBlocks.config.blocks_dir).to eq 'bem'
 		end
 		
 		it "set levels for bem" do
@@ -26,7 +25,7 @@ describe RailsBlocks do
 				config.levels = ['common', 'test']
 			end
 			
-			expect(RailsBlocks.config.levels).to be %w(common test)
+			expect(RailsBlocks.config.levels).to eq %w(common test)
 		end
 		
 		it "set template_engine for bem" do
@@ -34,7 +33,7 @@ describe RailsBlocks do
 				config.template_engine = '.haml'
 			end
 			
-			expect(RailsBlocks.config.template_engine).to be '.haml'
+			expect(RailsBlocks.config.template_engine).to eq '.haml'
 		end
 		
 		it "set element_separator for bem" do
@@ -42,7 +41,7 @@ describe RailsBlocks do
 				config.element_separator = 'sepa'
 			end
 			
-			expect(RailsBlocks.config.element_separator).to be 'sepa'
+			expect(RailsBlocks.config.element_separator).to eq 'sepa'
 		end
 		
 		it "set modifier_separator for bem" do
@@ -50,7 +49,7 @@ describe RailsBlocks do
 				config.modifier_separator = 'sepa'
 			end
 			
-			expect(RailsBlocks.config.modifier_separator).to be 'sepa'
+			expect(RailsBlocks.config.modifier_separator).to eq 'sepa'
 		end
 	end
 	
@@ -58,7 +57,7 @@ describe RailsBlocks do
 		before :each do
 			RailsBlocks.configure do |config|
 				config.prefix = 'test-'
-				config.blocks_path = 'test_path'
+				config.blocks_dir = 'test_path'
 				config.levels = ['common', 'test']
 				config.template_engine = '.haml'
 				config.element_separator = 'sepa'
@@ -72,7 +71,7 @@ describe RailsBlocks do
 		
 		it "resets the configuration block_path" do
 			RailsBlocks.reset
-			expect(RailsBlocks.config.blocks_path).to eq('app/blocks')
+			expect(RailsBlocks.config.blocks_dir).to eq('app/blocks')
 		end
 		
 		it "resets the configuration levels" do
@@ -82,17 +81,17 @@ describe RailsBlocks do
 		
 		it "resets the configuration template_engine" do
 			RailsBlocks.reset
-			expect(RailsBlocks.config.template_engine).to be '.slim'
+			expect(RailsBlocks.config.template_engine).to eq '.slim'
 		end
 		
 		it "resets the configuration element_separator" do
 			RailsBlocks.reset
-			expect(RailsBlocks.config.element_separator).to be '__'
+			expect(RailsBlocks.config.element_separator).to eq '__'
 		end
 		
 		it "resets the configuration modifier_separator" do
 			RailsBlocks.reset
-			expect(RailsBlocks.config.modifier_separator).to be '--'
+			expect(RailsBlocks.config.modifier_separator).to eq '--'
 		end
 	end
 end

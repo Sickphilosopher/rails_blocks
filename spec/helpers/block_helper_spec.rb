@@ -1,9 +1,9 @@
-require 'rails_blocks/helpers/block_helper'
+require File.join(File.dirname(__FILE__), '..', '..', 'app', 'helpers', 'block_helper')
 
 describe BlockHelper, type: :helper do
-	it "returns block content when simple b called" do
+	include BlockHelper
+	it "returns empty div with classwhen simple b called" do
 		result = b 'test-block'
-		block = RailsBlocks.get_block 'test-block'
-		expect(result).to eq(block.render)
+		expect(result).to eq("<div class=\"b-test-block\"></div>")
 	end
 end
