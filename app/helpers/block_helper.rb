@@ -2,22 +2,23 @@ module BlockHelper
 	include RailsBlocks::Path
 
 	def b(b_name, options = {}, &block)
-		template = find_template b_name, options
 		@blocks_stack = @blocks_stack || []
+		
+		template = find_template b_name, options
+		
+		klass = block_classes b_name, options #eval before change context block
 		@blocks_stack.push(b_name)
 	
-		if block_given?
-			@content = capture(&block)
-		end
+		@content = capture(&block) if block_given?
 		
 		@attrs = {}
-		@attrs[:class] = block_classes b_name, options
+		@attrs[:class] = klass
 		@attrs.merge! options[:attrs] if options[:attrs]
+		@attrs[:tag] = options[:tag] || 'div'
 		
 		if template.nil?
 			result = empty
 		else
-			@attrs[:tag] = options[:tag] || 'div'
 			result = render(file: template)
 		end
 		@blocks_stack.pop
@@ -25,14 +26,16 @@ module BlockHelper
 	end
 	
 	def e(e_name, options = {}, &block)
-		@content = capture(&block)
-		@attrs = {class: element_classes(@blocks_stack.last, e_name)}
+		@content = capture(&block) if block_given?
+		@attrs = {class: element_classes(@blocks_stack.last, e_name, options)}
+		@attrs[:tag] = options[:tag] || 'div'
+		
 		empty
 	end
 	
 	def empty
-		atrrs = @attrs.map {|key, value| key.to_s + '="' + value.to_s + "\""}.join(' ')
-		"<div #{atrrs}>#{content}</div>".html_safe
+		atrrs = @attrs.except(:tag).map {|key, value| key.to_s + '="' + value.to_s + "\""}.join(' ')
+		"<#{@attrs[:tag]} #{atrrs}>#{content}</#{@attrs[:tag]}>".html_safe
 	end
 	
 	def bem_attrs
@@ -45,8 +48,9 @@ module BlockHelper
 	
 	private
 	
-		def element_classes(b_name, e_name)
+		def element_classes(b_name, e_name, options = {})
 			classes = [element_class(b_name, e_name)]
+			classes << mix_class(options[:mix]) unless options[:mix].nil?
 			classes.join(' ')
 		end
 		
@@ -72,7 +76,11 @@ module BlockHelper
 		
 		def mix_class(mix)
 			#todo сделать очевиднее
-			element_class(@blocks_stack[@blocks_stack.length - 2], mix[:e].to_s)
+			if mix[:e].is_a? Array
+				mix[:e].map {|e| element_class(@blocks_stack.last, e)}.join(' ')
+			else
+				element_class(@blocks_stack.last, mix[:e].to_s)
+			end
 		end
 		
 		def block_class(b_name)
