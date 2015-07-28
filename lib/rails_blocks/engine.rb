@@ -1,7 +1,7 @@
 require 'rails_blocks/levels'
 module RailsBlocks
 	class Engine < Rails::Engine
-		isolate_namespace RailsBlocks
+		#isolate_namespace RailsBlocks
 		initializer 'rails_blocks.configure_rails_initialization' do
 			require 'rails_blocks/initializers/rails_blocks'
 		end
