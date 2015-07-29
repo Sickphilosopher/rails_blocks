@@ -1,5 +1,7 @@
 module BlockHelper
 	include RailsBlocks::Path
+	include RailsBlocks::Names
+	
 	BEM_KEYS = [:tag, :class, :attrs, :mods, :mix]
 	def b(b_name, options = {}, &block)
 		@blocks_stack = @blocks_stack || []
@@ -25,6 +27,7 @@ module BlockHelper
 	end
 	
 	def e(e_name, options = {}, &block)
+		raise RailsBlocks::NoBlockContext if @blocks_stack.nil? || @blocks_stack.empty?
 		@content = block_given? ? capture(&block) : nil
 		@attrs = {class: element_classes(@blocks_stack.last, e_name, options)}
 		@attrs[:tag] = options[:tag] || 'div'
@@ -46,43 +49,11 @@ module BlockHelper
 	end
 	
 	private
-	
-		def element_classes(b_name, e_name, options = {})
-			classes = [element_class(b_name, e_name)]
-			classes << mix_class(options[:mix]) unless options[:mix].nil?
-			classes.join(' ')
-		end
-		
-		def block_classes(b_name, options)
-			base_class = block_class(b_name)
-			classes = [base_class]
-			classes << mods_classes(base_class, options[:mods]) unless options[:mods].nil?
-			classes << mix_class(options[:mix]) unless options[:mix].nil?
-			classes.join(' ')
-		end
-	
 		def add_mods(b_name, mods)
 			mod, value = mods.first
 			mod_s = "_#{mod.to_s}_#{value.to_s}"
 			filename = b_name + mod_s
 			return filename
-		end
-		
-		def mods_classes(base_class, mods)
-			mods.map {|key, value| base_class + RailsBlocks.config.modifier_separator + key.to_s + '_' + value.to_s}
-		end
-		
-		def mix_class(mix)
-			mix[:e] = [mix[:e]] unless mix[:e].is_a? Array
-			mix[:e].map {|e| element_class(@blocks_stack.last, e.to_s)}.join(' ')
-		end
-		
-		def block_class(b_name)
-			RailsBlocks.config.prefix + b_name
-		end
-		
-		def element_class(b_name, e_name)
-			block_class(b_name) + RailsBlocks.config.element_separator + e_name
 		end
 		
 		def find_template(b_name, options = {})

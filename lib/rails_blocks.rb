@@ -2,6 +2,8 @@ require 'rails_blocks/version'
 require 'rails_blocks/blocks/block'
 require 'rails_blocks/configuration'
 require 'rails_blocks/path'
+require 'rails_blocks/names'
+require 'rails_blocks/exceptions'
 require 'rails_blocks/engine' if defined?(Rails)
 
 module RailsBlocks
