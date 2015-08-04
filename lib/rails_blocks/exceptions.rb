@@ -1,3 +1,4 @@
 module RailsBlocks
-	class NoBlockContext < StandardError; end
+	class NoBlockContextError < StandardError; end
+	class BadMixError < StandardError; end
 end

@@ -24,7 +24,7 @@
 #	* zeus: 'zeus rspec' (requires the server to be started separately)
 #	* 'just' rspec: 'rspec'
 
-guard :rspec, cmd: "spring rspec" do
+guard :rspec, cmd: "rspec" do
 	# watch /lib/ files
 	watch(%r{^lib/(.+).rb$}) do |m|
 		puts m[1]

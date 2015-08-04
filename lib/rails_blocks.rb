@@ -1,9 +1,8 @@
 require 'rails_blocks/version'
 require 'rails_blocks/blocks/block'
 require 'rails_blocks/configuration'
-require 'rails_blocks/path'
-require 'rails_blocks/names'
 require 'rails_blocks/exceptions'
+require 'rails_blocks/path'
 require 'rails_blocks/engine' if defined?(Rails)
 
 module RailsBlocks
@@ -21,10 +20,6 @@ module RailsBlocks
 	
 	def self.configure
 		yield config
-	end
-	
-	def self.get_block(b_name)
-		Blocks::Block.new b_name
 	end
 	
 	def self.reset

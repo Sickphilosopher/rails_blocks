@@ -2,8 +2,8 @@ describe BlockHelper, type: :helper do
 	include BlockHelper
 	context ".b" do
 		it "renders empty div with class when called without options" do
-			result = b 'test-block'
-			expect(result).to eq '<div class="b-test-block"></div>'
+			result = b :test
+			expect(result).to eq '<div class="b-test"></div>'
 		end
 		
 		it "renders div with content when called with block" do
@@ -21,12 +21,12 @@ describe BlockHelper, type: :helper do
 	
 	context ".e" do
 		it "raise error when called outside block" do
-			expect{ e 'test-element' }.to raise_error RailsBlocks::NoBlockContext
+			expect{ e 'test-element' }.to raise_error RailsBlocks::NoBlockContextError
 		end
 		
 		it "renders empty element with class when called without options" do
 			b 'test' do
-				result = e 'element'
+				result = e :element
 				expect(result).to eq '<div class="b-test__element"></div>'
 			end
 		end

@@ -24,11 +24,48 @@ module RailsBlocks
 			Rails.root.join RailsBlocks.config.blocks_dir
 		end
 		
-		def template_exists?(file)
-			RailsBlocks.config.levels.reverse.each do |level|
-				return true if File.exists? File.join(blocks_dir, level, file + '.slim')
+		def block_template(b_name, options = {})
+			block_dir = get_block_dir b_name
+			return nil if block_dir.nil?
+			
+			unless mods = options[:mods].nil?
+				path = File.join block_dir, b_name + mod(options[:mods]) + RailsBlocks.config.template_engine
+				return path if File.exists? path
 			end
-			return false
+			
+			filename = b_name
+			path = File.join block_dir, filename + RailsBlocks.config.template_engine
+			if File.exists? path
+				return path
+			end
 		end
+		
+		def element_template(b_name, e_name, options = {})
+			block_dir = get_block_dir b_name
+			return nil if block_dir.nil?
+			
+			unless mods = options[:mods].nil?
+				path = File.join block_dir, RailsBlocks.config.element_separator + e_name + mod(options[:mods]) + RailsBlocks.config.template_engine
+				return path if File.exists? path
+			end
+			
+			return path if File.exists? path = File.join(block_dir, RailsBlocks.config.element_separator + e_name + RailsBlocks.config.template_engine)
+		end
+		
+		private
+			def get_block_dir(b_name)
+				RailsBlocks.config.levels.reverse.each do |level|
+					block_dir = File.join(blocks_dir, level, b_name)
+					if Dir.exists? block_dir
+						return block_dir
+					end
+				end
+				nil
+			end
+		
+			def mod(mods)
+				mod, value = mods.first
+				"_#{mod.to_s}_#{value.to_s}"
+			end
 	end
 end

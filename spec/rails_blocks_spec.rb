@@ -7,9 +7,8 @@ describe RailsBlocks do
 			RailsBlocks.configure do |config|
 				config.prefix = 't-'
 			end
-			
-			block = RailsBlocks.get_block 'test'
-			expect(block.klass).to eq('t-test')
+
+			expect(RailsBlocks.config.prefix).to eq 't-'
 		end
 		
 		it "set path for blocks folder" do
