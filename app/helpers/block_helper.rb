@@ -20,6 +20,7 @@ module BlockHelper
 		@attrs = {}
 		@attrs[:class] = classes.join ' '
 		@attrs.merge! options[:attrs] if options[:attrs]
+		@props = options.except(BEM_KEYS)
 		@attrs[:tag] = options[:tag] || 'div'
 		result = template.nil? ? empty(content) : render(file: template, locals: {content: content})
 		pop_context_block
