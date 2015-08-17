@@ -18,7 +18,7 @@ module BlockHelper
 		classes |= options[:class] if options[:class]
 		
 		content = block_given? ? capture(&block) : nil
-		@attrs = {class: classes.join ' '}
+		@attrs = {class: classes.join(' ')}
 		@attrs.merge! options[:attrs] if options[:attrs]
 		@props = options.except(BEM_KEYS)
 		@attrs[:tag] = options[:tag] || 'div'
