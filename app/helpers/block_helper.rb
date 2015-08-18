@@ -15,7 +15,7 @@ module BlockHelper
 		
 		classes = block_classes b_name, options
 		classes |= mix_classes(options[:mix], parent_block) if options[:mix]
-		classes |= options[:class] if options[:class]
+		classes |= Array(options[:class]) if options[:class]
 		
 		content = block_given? ? capture(&block) : nil
 		@attrs = {class: classes.join(' ')}
@@ -33,7 +33,7 @@ module BlockHelper
 		template = element_template parent_block, e_name, options
 		classes = element_classes parent_block, e_name, options
 		classes |= mix_classes(options[:mix], parent_block) if options[:mix]
-		classes |= options[:class] if options[:class]
+		classes |= Array(options[:class]) if options[:class]
 		
 		content = block_given? ? capture(&block) : nil
 		@attrs = {class: classes.join(' ')}
