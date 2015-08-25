@@ -25,7 +25,7 @@ module RailsBlocks
 		end
 		
 		def block_template(b_name, options = {})
-			block_dir = get_block_dir b_name
+			block_dir = get_block_dir b_name, options[:levels]
 			return nil if block_dir.nil?
 			
 			unless mods = options[:mods].nil?
@@ -41,7 +41,7 @@ module RailsBlocks
 		end
 		
 		def element_template(b_name, e_name, options = {})
-			block_dir = get_block_dir b_name
+			block_dir = get_block_dir b_name, options[:levels]
 			return nil if block_dir.nil?
 			
 			unless mods = options[:mods].nil?
@@ -53,8 +53,8 @@ module RailsBlocks
 		end
 		
 		private
-			def get_block_dir(b_name)
-				RailsBlocks.config.levels.reverse.each do |level|
+			def get_block_dir(b_name, levels)
+				levels.reverse.each do |level|
 					block_dir = File.join(blocks_dir, level, b_name)
 					if Dir.exists? block_dir
 						return block_dir

@@ -2,6 +2,8 @@ require 'rails_blocks/levels'
 module RailsBlocks
 	class Engine < Rails::Engine
 		#isolate_namespace RailsBlocks
+		config.autoload_paths << File.expand_path("../rails_blocks", __FILE__)
+		
 		initializer 'rails_blocks.configure_rails_initialization' do
 			require 'rails_blocks/initializers/rails_blocks'
 		end

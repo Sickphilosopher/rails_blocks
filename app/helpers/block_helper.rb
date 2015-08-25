@@ -7,10 +7,22 @@ module BlockHelper
 	
 	BEM_KEYS = [:tag, :class, :attrs, :mods, :mix]
 	
+	def bem_page(options, &block)
+		@page_options = options
+		block_given? ? capture(&block) : 'boo'
+	end
+	
+	def page_options
+		defaults = {
+			levels: RailsBlocks.config.levels
+		}
+		defaults.merge @page_options || {}
+	end
+	
 	def b(b_name, options = {}, &block)
 		parent_block = context_block
 		push_context_block b_name
-		
+		options = page_options.merge options
 		template = block_template b_name, options
 		
 		classes = block_classes b_name, options
@@ -29,7 +41,7 @@ module BlockHelper
 	
 	def e(e_name, options = {}, &block)
 		raise RailsBlocks::NoBlockContextError if (parent_block = context_block).nil?
-		
+		options = page_options.merge options
 		template = element_template parent_block, e_name, options
 		classes = element_classes parent_block, e_name, options
 		classes |= mix_classes(options[:mix], parent_block) if options[:mix]
