@@ -9,7 +9,7 @@ module BlockHelper
 	
 	def bem_page(options, &block)
 		@page_options = options
-		block_given? ? capture(&block) : 'boo'
+		block_given? ? capture(&block) : ''
 	end
 	
 	def page_options

@@ -28,7 +28,7 @@ module RailsBlocks
 			block_dir = get_block_dir b_name, options[:levels]
 			return nil if block_dir.nil?
 			
-			unless mods = options[:mods].nil?
+			if options[:mods]
 				path = File.join block_dir, b_name + mod(options[:mods]) + RailsBlocks.config.template_engine
 				return path if File.exists? path
 			end
@@ -44,7 +44,7 @@ module RailsBlocks
 			block_dir = get_block_dir b_name, options[:levels]
 			return nil if block_dir.nil?
 			
-			unless mods = options[:mods].nil?
+			if options[:mods]
 				path = File.join block_dir, RailsBlocks.config.element_separator + e_name + mod(options[:mods]) + RailsBlocks.config.template_engine
 				return path if File.exists? path
 			end
