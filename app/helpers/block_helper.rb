@@ -5,7 +5,7 @@ module BlockHelper
 	include RailsBlocks::Path
 	include RailsBlocks::Names
 	
-	BEM_KEYS = [:tag, :class, :attrs, :mods, :mix]
+	BEM_KEYS = [:tag, :class, :attrs, :mods, :mix, :data]
 	
 	def bem_page(options, &block)
 		@page_options = options
@@ -19,19 +19,20 @@ module BlockHelper
 		defaults.merge @page_options || {}
 	end
 	
+	#TODO бога ради, отрефактори это дерьмо
 	def b(b_name, options = {}, &block)
 		parent_block = context_block
 		push_context_block b_name
 		options = page_options.merge options
+		options[:parent_block] = parent_block if parent_block
 		template = block_template b_name, options
-		
 		classes = block_classes b_name, options
-		classes |= mix_classes(options[:mix], parent_block) if options[:mix]
-		classes |= Array(options[:class]) if options[:class]
 		
 		content = block_given? ? capture(&block) : nil
+		return content if options[:only_context] #for partial with only elements
 		@attrs = {class: classes.join(' ')}
 		@attrs.merge! options[:attrs] if options[:attrs]
+		@attrs.merge! Hash[options[:data].map{|k,v| ["data-#{k}", v]}] if options[:data]
 		@props = options.except(BEM_KEYS)
 		@attrs[:tag] = options[:tag] || 'div'
 		result = template.nil? ? empty(content) : render(file: template, locals: {content: content})
@@ -39,13 +40,19 @@ module BlockHelper
 		result
 	end
 	
+	def b_context(b_name, &block)
+		push_context_block b_name
+		result = capture(&block)
+		pop_context_block
+		result
+	end
+	
 	def e(e_name, options = {}, &block)
 		raise RailsBlocks::NoBlockContextError if (parent_block = context_block).nil?
 		options = page_options.merge options
+		options[:parent_block] = parent_block
 		template = element_template parent_block, e_name, options
-		classes = element_classes parent_block, e_name, options
-		classes |= mix_classes(options[:mix], parent_block) if options[:mix]
-		classes |= Array(options[:class]) if options[:class]
+		classes = element_classes(parent_block, e_name, options)
 		
 		content = block_given? ? capture(&block) : nil
 		@attrs = {class: classes.join(' ')}
@@ -68,6 +75,7 @@ module BlockHelper
 	end
 	
 	private
+		
 		def blocks_stack
 			@blocks_stack = @blocks_stack || []
 		end

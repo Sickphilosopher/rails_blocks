@@ -27,6 +27,8 @@ module RailsBlocks
 			def classes(base_class, options = {})
 				classes = [base_class]
 				classes |= mods_classes(base_class, options[:mods]) unless options[:mods].nil?
+				classes |= mix_classes(options[:mix], options[:parent_block]) if options[:mix]
+				classes |= Array(options[:class]) if options[:class]
 				classes
 			end
 			
