@@ -34,7 +34,8 @@ module RailsBlocks
 			
 			def mods_classes(base_class, mods)
 				mods.map do |key, value|
-					mod = value == :true ? key.to_s : key.to_s + '_' + value.to_s
+					next('') unless value
+					mod = value == true ? key.to_s : key.to_s + '_' + value.to_s
 					base_class + RailsBlocks.config.modifier_separator + mod
 				end
 			end
