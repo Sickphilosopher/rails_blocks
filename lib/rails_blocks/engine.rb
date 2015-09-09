@@ -20,5 +20,9 @@ module RailsBlocks
 			include RailsBlocks::Levels
 			before_filter :add_view_paths
 		end
+		
+		rake_tasks do
+			load "tasks/rails_blocks.rake"
+		end
 	end
 end

@@ -5,7 +5,7 @@ module BlockHelper
 	include RailsBlocks::Path
 	include RailsBlocks::Names
 	
-	BEM_KEYS = [:tag, :class, :attrs, :mods, :mix, :data]
+	BEM_KEYS = [:tag, :class, :attrs, :mods, :mix, :data, :levels, :content]
 	
 	def bem_page(options, &block)
 		@page_options = options
@@ -28,7 +28,7 @@ module BlockHelper
 		template = block_template b_name, options
 		classes = block_classes b_name, options
 		
-		content = block_given? ? capture(&block) : nil
+		content = block_given? ? capture(&block) : options[:content]
 		return content if options[:only_context] #for partial with only elements
 		@attrs = {class: classes.join(' ')}
 		@attrs.merge! options[:attrs] if options[:attrs]
@@ -54,7 +54,7 @@ module BlockHelper
 		template = element_template parent_block, e_name, options
 		classes = element_classes(parent_block, e_name, options)
 		
-		content = block_given? ? capture(&block) : nil
+		content = block_given? ? capture(&block) : options[:content]
 		@attrs = {class: classes.join(' ')}
 		@props = options.except(BEM_KEYS)
 		@attrs[:tag] = options[:tag] || 'div'
