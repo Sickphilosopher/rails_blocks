@@ -28,10 +28,8 @@ module RailsBlocks
 			block_dir = get_block_dir b_name, options[:levels]
 			return nil if block_dir.nil?
 			
-			if options[:mods]
-				path = File.join block_dir, b_name + mod(options[:mods]) + RailsBlocks.config.template_engine
-				return path if File.exists? path
-			end
+			path = mod_path(block_dir, b_name, options)
+			return path if path
 			
 			filename = b_name
 			path = File.join block_dir, filename + RailsBlocks.config.template_engine
@@ -44,15 +42,20 @@ module RailsBlocks
 			block_dir = get_block_dir b_name, options[:levels]
 			return nil if block_dir.nil?
 			
-			if options[:mods]
-				path = File.join block_dir, RailsBlocks.config.element_separator + e_name + mod(options[:mods]) + RailsBlocks.config.template_engine
-				return path if File.exists? path
-			end
-			
+			path = mod_path(block_dir, RailsBlocks.config.element_separator + e_name, options)
+			return path if path
+
 			return path if File.exists? path = File.join(block_dir, RailsBlocks.config.element_separator + e_name + RailsBlocks.config.template_engine)
 		end
 		
 		private
+		
+			def mod_path(dir, name, options)
+				return nil unless options[:mods]
+				path = File.join dir, name + '_' + mod_class(*options[:mods].first) + RailsBlocks.config.template_engine
+				File.exists?(path) ? path : nil
+			end
+			
 			def get_block_dir(b_name, levels)
 				levels.reverse.each do |level|
 					block_dir = File.join(blocks_dir, level, b_name)
@@ -61,11 +64,6 @@ module RailsBlocks
 					end
 				end
 				nil
-			end
-		
-			def mod(mods)
-				mod, value = mods.first
-				"_#{mod.to_s}_#{value.to_s}"
 			end
 	end
 end

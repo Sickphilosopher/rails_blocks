@@ -29,7 +29,6 @@ module BlockHelper
 		classes = block_classes b_name, options
 		
 		content = block_given? ? capture(&block) : options[:content]
-		return content if options[:only_context] #for partial with only elements
 		@attrs = {class: classes.join(' ')}
 		@attrs.merge! options[:attrs] if options[:attrs]
 		@attrs.merge! Hash[options[:data].map{|k,v| ["data-#{k}", v]}] if options[:data]
