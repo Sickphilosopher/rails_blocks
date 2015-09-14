@@ -73,6 +73,10 @@ module BlockHelper
 		@attrs
 	end
 	
+	def bem_attrs_without_tag
+		@attrs.except :tag
+	end
+	
 	private
 		
 		def blocks_stack
