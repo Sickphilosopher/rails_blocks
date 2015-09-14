@@ -33,8 +33,9 @@ module BlockHelper
 		@attrs.merge! options[:attrs] if options[:attrs]
 		@attrs.merge! Hash[options[:data].map{|k,v| ["data-#{k}", v]}] if options[:data]
 		@props = options.except(BEM_KEYS)
+		@mods = options[:mods]
 		@attrs[:tag] = options[:tag] || 'div'
-		result = template.nil? ? empty(content) : render(file: template, locals: {content: content})
+		result = template.nil? ? empty(content) : render(file: template, locals: {content: content, options: options})
 		pop_context_block
 		result
 	end
@@ -56,10 +57,11 @@ module BlockHelper
 		content = block_given? ? capture(&block) : options[:content]
 		@attrs = {class: classes.join(' ')}
 		@props = options.except(BEM_KEYS)
+		@mods = options[:mods]
 		@attrs[:tag] = options[:tag] || 'div'
 		@attrs.merge! options[:attrs] if options[:attrs]
 		
-		template.nil? ? empty(content) : render(file: template, locals: {content: content})
+		template.nil? ? empty(content) : render(file: template, locals: {content: content, options: options})
 	end
 	
 	def empty(content)
