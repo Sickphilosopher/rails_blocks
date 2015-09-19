@@ -2,6 +2,9 @@ $bemBlockPrefix: 'b-'
 $bemElementSeparator: '__' 
 $bemModifierSeparator: '--'
 
+@function b-class($block)
+	@return ".#{$bemBlockPrefix+$block}"
+	
 @function selectorToString($selector)
 	$selector: inspect($selector) //cast to string
 	$selector: str-slice($selector, 2, -2) //remove bracket
@@ -24,10 +27,16 @@ $bemModifierSeparator: '--'
 =b($block)
 	.#{$bemBlockPrefix+$block}
 		@content
+		
+=plus_b
+	@at-root
+		$block: &
+		#{$block} + #{$block}
+			@content
 
 //.b-subscribe-form__form--submit_field
 
-=e($element)
+=e($element) 
 	$selector: &
 	@at-root
 		@if containsModifier($selector)
