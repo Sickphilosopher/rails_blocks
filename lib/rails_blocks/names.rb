@@ -13,12 +13,12 @@ module RailsBlocks
 		def mix_classes(mixes, context_block)
 			mixes = [mixes] unless mixes.is_a? Array
 			mixes.map do |mix|
-				if mix[:e].nil?
-					raise RailsBlocks::BadMixError if mix[:b].nil?
-					block_class(mix[:b].to_s)
-				else
+				if mix[:e]
 					raise RailsBlocks::BadMixError if context_block.nil?
-					element_class(context_block, mix[:e].to_s)
+					element_classes(context_block, mix[:e].to_s, mix)
+				else
+					raise RailsBlocks::BadMixError if mix[:b].nil?
+					block_classes(mix[:b].to_s, mix)
 				end
 			end
 		end
