@@ -16,12 +16,20 @@ $bemModifierSeparator: '--'
 		@return true
 	@else
 		@return false
+
+@function containsPseudo($selector)
+	$selector: selectorToString($selector)
+	@if str-index($selector, ':')
+		@return true
+	@else
+		@return false
 		
 @function getBlock($selector)
 	$selector: selectorToString($selector)
 	$elementStart: str-index($selector, $bemElementSeparator)
 	$modifierStart: str-index($selector, $bemModifierSeparator)
-	$start: if($elementStart, $elementStart - 1, $modifierStart - 1)
+	$pseudoStart: str-index($selector, ':')
+	$start: if($elementStart, $elementStart - 1, if($modifierStart, $modifierStart - 1, $pseudoStart - 1))
 	@return str-slice($selector, 0, $start)
 
 =b($block)
@@ -33,13 +41,19 @@ $bemModifierSeparator: '--'
 		$block: &
 		#{$block} + #{$block}
 			@content
+			
+=hover_b
+	@at-root
+		$block: &
+		#{$block}:hover
+			@content
 
 //.b-subscribe-form__form--submit_field
 
 =e($element) 
 	$selector: &
 	@at-root
-		@if containsModifier($selector)
+		@if containsModifier($selector) or containsPseudo($selector) 
 			$block: getBlock($selector)
 			#{$selector}
 				#{$block+$bemElementSeparator+$element}
