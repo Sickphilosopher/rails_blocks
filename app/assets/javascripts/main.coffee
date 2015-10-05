@@ -1,6 +1,6 @@
 $ ->
 	# $.extend $,
-	# 	RB: 
+	# 	RB:
 	# 		blocks: {}
 	# 	decl: (name, options) ->
 	# 		block = @createBlockDeclaration(name, options)

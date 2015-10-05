@@ -29,6 +29,7 @@ module RailsBlocks
 				classes |= mods_classes(base_class, options[:mods]) unless options[:mods].nil?
 				classes |= mix_classes(options[:mix], options[:parent_block]) if options[:mix]
 				classes |= Array(options[:class]) if options[:class]
+				classes << RailsBlocks.config.js_class if options[:js]
 				classes
 			end
 			

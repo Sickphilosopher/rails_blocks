@@ -6,6 +6,7 @@ module RailsBlocks
 		attr_accessor :template_engine
 		attr_accessor :element_separator
 		attr_accessor :modifier_separator
+		attr_accessor :js_class
 		
 		def initialize
 			@prefix = 'b-'
@@ -14,6 +15,7 @@ module RailsBlocks
 			@template_engine = '.slim'
 			@element_separator = '__'
 			@modifier_separator = '--'
+			@js_class = 'js_bem'
 		end
 	end
 end
