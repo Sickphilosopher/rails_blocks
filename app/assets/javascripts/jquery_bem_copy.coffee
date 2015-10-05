@@ -332,7 +332,7 @@
 	###
 
 	BEM::buildBlockClass = (blockName) ->
-		blockName
+		@config.blockPrefix + blockName
 
 	###*
 	# Build class name for element.
@@ -442,6 +442,7 @@
 
 	$.BEM = new BEM(
 		namePattern: '[a-zA-Z0-9-]+'
+		blockPrefix: 'b-'
 		elemPrefix: '__'
 		modPrefix: '--'
 		modDlmtr: '_')

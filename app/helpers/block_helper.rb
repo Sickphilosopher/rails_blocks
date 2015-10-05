@@ -31,7 +31,7 @@ module BlockHelper
 		content = block_given? ? capture(&block) : options[:content]
 		@attrs = {class: classes.join(' ')}
 		@attrs.merge! options[:attrs] if options[:attrs]
-		@attrs.merge! Hash[options[:data].map{|k,v| ["data-#{k}", v]}] if options[:data]
+		@attrs["data-bem"] = options[:data].to_json if options[:data]
 		@props = options.except(BEM_KEYS)
 		@mods = options[:mods]
 		@attrs[:tag] = options[:tag] || 'div'
@@ -66,7 +66,7 @@ module BlockHelper
 	
 	def empty(content)
 		atrrs = @attrs.except(:tag).map do |key, value|
-			key.to_s + '="' + value.to_s + "\""
+			key.to_s + '=\'' + value.to_s + "'"
 		end
 		"<#{@attrs[:tag]} #{atrrs.join(' ')}>#{content}</#{@attrs[:tag]}>".html_safe
 	end
