@@ -1,21 +1,34 @@
 class window.Block
 	constructor: ($b) ->
 		@$node = $b
-		@name = $b.getBlockName()
+		@name = $$.getBlockName($b)
 		@id = $$.guid()
 		@params = $b.data('bem')
 		#$.extend this, decl.methods
 		@_addEvents() if @events
+		# if @elements
+		# 	for element in @elements
+		# 		@_addEvents(element)
+		@init() if @init
 	
-	get_element: (e_name) ->
-		$(".b-#{@name}__#{e_name}", @$node)
+	elem: (e_name, mod_name, mod_value) ->
+		klass = ".b-#{@name}__#{e_name}"
+		$elem = $(klass, @$node)
+		if mod_name
+			mod = mod_name
+			mod += "_#{mod_value}" if mod_value
+			$elem = $elem.filter("#{klass}--#{mod}")
+		$elem
 		
-	_addEvents: ->
+	_addEvents: (element)->
 		for event_name, handler of @events
 			p = event_name.split(' ')
 			if typeof handler == 'string'
 				handler = decl.methods[handler]
 			@$node.on p[0], p[1], handler.bind(@)
+			
+	_trigger: (event) ->
+		@$node.trigger event
 # class window.Block
 # 	constructor: ($b) ->
 # 		name = $b.getBlockName()
