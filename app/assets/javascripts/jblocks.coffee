@@ -9,6 +9,7 @@ window.$$ =
 	bem_class: '.js_bem'
 	guid: () ->
 		return @_id++
+
 	processOptions: ($dom, b_name, o) ->
 		if o.attrs
 			for attr, attr_value of o.attrs
@@ -29,7 +30,8 @@ window.$$ =
 		tag = o.tag || 'div'
 		$b = $("<#{tag} class='b-#{b_name}'>")
 		$$.processOptions($b, b_name, o)
-		$b#.initBlocks()
+		$$.getBlocks($b)
+		$b
 		
 	init: ($context) ->
 		$$.getBlocks($context.find($$.bem_class))
@@ -51,7 +53,25 @@ window.$$ =
 		for klass in $b.attr('class').split(/\s+/)
 			return klass.replace('b-', '') if regexp.test(klass)
 			
+	makeMod: (name, value) ->
+		mod = name
+		mod += "_#{value}" if value
+		mod
+			
 $.fn.destroyBlocks = ->
 	@find($$.bem_class).getBlocks().each ->
 		@destroy()
-		
+
+$.fn.addMod = (name, value) ->
+	mod = $$.makeMod(name, value)
+	if @e_name
+		@addClass("b-#{@b_name}__#{@e_name}--#{mod}")
+	else
+		@addClass("b-#{@b_name}--#{mod}")
+
+$.fn.delMod = (name, value) ->
+	mod = $$.makeMod(name, value)
+	if @e_name
+		@removeClass("b-#{@b_name}__#{@e_name}--#{mod}")
+	else
+		@removeClass("b-#{@b_name}--#{mod}")

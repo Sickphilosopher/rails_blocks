@@ -2,6 +2,7 @@ class window.Block
 	constructor: ($b) ->
 		@$node = $b
 		@name = $$.getBlockName($b)
+		@$node.b_name = @name
 		@id = $$.guid()
 		@params = $b.data('bem')
 		#$.extend this, decl.methods
@@ -15,10 +16,12 @@ class window.Block
 		klass = ".b-#{@name}__#{e_name}"
 		$elem = $(klass, @$node)
 		if mod_name
-			mod = mod_name
-			mod += "_#{mod_value}" if mod_value
-			$elem = $elem.filter("#{klass}--#{mod}")
+			$elem = $elem.filter("#{klass}--#{$$.makeMod(mod_name, mod_value)}")
+		 
+		$elem.e_name = e_name
+		$elem.b_name = @name
 		$elem
+			
 		
 	_addEvents: (element)->
 		for event_name, handler of @events
@@ -29,6 +32,7 @@ class window.Block
 			
 	_trigger: (event) ->
 		@$node.trigger event
+		
 # class window.Block
 # 	constructor: ($b) ->
 # 		name = $b.getBlockName()
