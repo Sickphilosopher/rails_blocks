@@ -5,6 +5,7 @@ camelCase = (input) ->
 window.$$ =
 	decls: {}
 	cache: {}
+	utils: {}
 	_id: 0
 	bem_class: '.js_bem'
 	guid: () ->
