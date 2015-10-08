@@ -32,7 +32,13 @@ class window.Block
 			
 	_trigger: (event) ->
 		@$node.trigger event
-		
+	
+	addElem: (e_name, o) ->
+		o ||= {}
+		$elem = $$.makeElement(@$node, @name, e_name, o)
+		$elem.e_name = e_name
+		$elem.b_name = @name
+		$elem
 # class window.Block
 # 	constructor: ($b) ->
 # 		name = $b.getBlockName()

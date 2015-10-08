@@ -17,20 +17,19 @@ window.$$ =
 		if o.content
 			$dom.html(o.content)
 		if o.elements
-			$$.makeElements($dom, b_name, o.elements)
+			for e_name, e_o of o.elements
+				$$.makeElement($dom, b_name, e_name, e_o)
 			
-	makeElements: ($parent, b_name, elements) ->
-		for e_name, o of elements
-			tag = o.tag || 'div'
-			$e = $("<#{tag} class='b-#{b_name}__#{e_name}'>")
-			$$.processOptions($e, b_name, o)
-			$parent.append $e
+	makeElement: ($parent, b_name, e_name, o) ->
+		tag = o.tag || 'div'
+		$e = $("<#{tag} class='b-#{b_name}__#{e_name}'>")
+		$$.processOptions($e, b_name, o)
+		$parent.append $e
 			
 	makeBlock: (b_name, o) ->
 		tag = o.tag || 'div'
 		$b = $("<#{tag} class='b-#{b_name}'>")
 		$$.processOptions($b, b_name, o)
-		$$.getBlocks($b)
 		$b
 		
 	init: ($context) ->
