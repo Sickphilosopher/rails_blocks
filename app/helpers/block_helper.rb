@@ -28,14 +28,7 @@ module BlockHelper
 		template = block_template b_name, options
 		classes = block_classes b_name, options
 		
-		content = block_given? ? capture(&block) : options[:content]
-		@attrs = {class: classes.join(' ')}
-		@attrs.merge! options[:attrs] if options[:attrs]
-		@attrs["data-bem"] = options[:data].to_json if options[:data]
-		@props = options.except(BEM_KEYS)
-		@mods = options[:mods]
-		@attrs[:tag] = options[:tag] || 'div'
-		result = template.nil? ? empty(content) : render(file: template, locals: {content: content, options: options})
+		result = element(classes, template, options, &block)
 		pop_context_block
 		result
 	end
@@ -53,13 +46,15 @@ module BlockHelper
 		options[:parent_block] = parent_block
 		template = element_template parent_block, e_name, options
 		classes = element_classes(parent_block, e_name, options)
-		
-		content = block_given? ? capture(&block) : options[:content]
+		element(classes, template, options, &block)
+	end
+	
+	def element(classes, template, options, &block)
+		content = block ? capture(&block) : options[:content]
 		@attrs = {class: classes.join(' ')}
-		@props = options.except(BEM_KEYS)
-		@mods = options[:mods]
-		@attrs[:tag] = options[:tag] || 'div'
 		@attrs.merge! options[:attrs] if options[:attrs]
+		@attrs["data-bem"] = options[:data].to_json if options[:data]
+		@attrs[:tag] = options[:tag] || 'div'
 		
 		template.nil? ? empty(content) : render(file: template, locals: {content: content, options: options})
 	end
@@ -70,6 +65,7 @@ module BlockHelper
 		end
 		"<#{@attrs[:tag]} #{atrrs.join(' ')}>#{content}</#{@attrs[:tag]}>".html_safe
 	end
+	
 	
 	def bem_attrs
 		@attrs
