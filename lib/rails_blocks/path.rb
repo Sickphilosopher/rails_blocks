@@ -25,20 +25,21 @@ module RailsBlocks
 		end
 		
 		def block_template(b_name, options = {})
-			block_dir = get_block_dir b_name, options[:levels]
-			return nil if block_dir.nil?
-			
-			path = mod_path(block_dir, b_name, options)
-			return path if path
-			
-			filename = b_name
-			path = File.join block_dir, filename + RailsBlocks.config.template_engine
-			if File.exists? path
-				return path
+			options[:levels].reverse.each do |level|
+				next unless RailsBlocks.tree[level][b_name]
+				return RailsBlocks.tree[level][b_name][mod(options)] if RailsBlocks.tree[level][b_name][mod(options)]
+				return RailsBlocks.tree[level][b_name]['']
 			end
+			return nil
 		end
 		
 		def element_template(b_name, e_name, options = {})
+			options[:levels].reverse.each do |level|
+				next unless RailsBlocks.tree[level][b_name]
+				return RailsBlocks.tree[level][b_name]["_#{e_name}"] if RailsBlocks.tree[level][b_name]["_#{e_name}"]
+			end
+			return nil
+			
 			block_dir = get_block_dir b_name, options[:levels]
 			return nil if block_dir.nil?
 			
@@ -49,7 +50,12 @@ module RailsBlocks
 		end
 		
 		private
-		
+			
+			def mod(options)
+				return '' unless options[:mods]
+				mod_class(*options[:mods].first)
+			end
+			
 			def mod_path(dir, name, options)
 				return nil unless options[:mods]
 				path = File.join dir, name + '_' + mod_class(*options[:mods].first) + RailsBlocks.config.template_engine
