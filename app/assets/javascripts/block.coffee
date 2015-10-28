@@ -40,8 +40,8 @@ class window.Block
 		$elem.b_name = @name
 		$elem
 		
-	addMod: (mod) ->
-		@$node.addClass("b-#{@name}--#{mod}")
+	addMod: (mod, value) ->
+		@$node.addMod(mod, value)
 # class window.Block
 # 	constructor: ($b) ->
 # 		name = $b.getBlockName()
