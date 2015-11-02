@@ -35,6 +35,7 @@ window.$$ =
 		
 	init: ($context) ->
 		$$.getBlocks($context.find($$.bem_class))
+		$$.getBlocks($context) if $context.hasClass $$.bem_class
 		
 	getBlocks: ($context) ->
 		$context.map ->
