@@ -52,7 +52,7 @@ module RailsBlocks
 		private
 			
 			def mod(options)
-				return '' unless options[:mods]
+				return '' unless options[:mods] && !options[:mods].empty?
 				mod_class(*options[:mods].first)
 			end
 			
