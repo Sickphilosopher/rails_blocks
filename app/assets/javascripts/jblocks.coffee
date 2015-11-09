@@ -7,7 +7,8 @@ window.$$ =
 	cache: {}
 	utils: {}
 	_id: 0
-	bem_class: '.js_bem'
+	bem_class: 'js_bem'
+	bem_class_selector: '.js_bem'
 	guid: () ->
 		return @_id++
 
@@ -26,6 +27,7 @@ window.$$ =
 		$e = $("<#{tag} class='b-#{b_name}__#{e_name}'>")
 		$$.processOptions($e, b_name, o)
 		$parent.append $e
+		$e
 			
 	makeBlock: (b_name, o) ->
 		tag = o.tag || 'div'
@@ -34,7 +36,7 @@ window.$$ =
 		$b
 		
 	init: ($context) ->
-		$$.getBlocks($context.find($$.bem_class))
+		$$.getBlocks($context.find($$.bem_class_selector))
 		$$.getBlocks($context) if $context.hasClass $$.bem_class
 		
 	getBlocks: ($context) ->
@@ -60,7 +62,7 @@ window.$$ =
 		mod
 			
 $.fn.destroyBlocks = ->
-	@find($$.bem_class).getBlocks().each ->
+	@find($$.bem_class_selector).getBlocks().each ->
 		@destroy()
 
 $.fn.addMod = (name, value) ->

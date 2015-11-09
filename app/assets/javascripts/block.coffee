@@ -33,15 +33,18 @@ class window.Block
 	_trigger: (event) ->
 		@$node.trigger event
 	
-	addElem: (e_name, o) ->
+	addElem: (e_name, o, $parent) ->
 		o ||= {}
-		$elem = $$.makeElement(@$node, @name, e_name, o)
+		$elem = $$.makeElement($parent || @$node, @name, e_name, o)
 		$elem.e_name = e_name
 		$elem.b_name = @name
 		$elem
 		
 	addMod: (mod, value) ->
 		@$node.addMod(mod, value)
+		
+	delMod: (mod, value) ->
+		@$node.delMod(mod, value)
 # class window.Block
 # 	constructor: ($b) ->
 # 		name = $b.getBlockName()
@@ -53,13 +56,13 @@ class window.Block
 # 		@params = params
 # 		@$node = $b
 # 		@id = $$.guid()
-# 		
+#
 # 		$.extend this, decl.methods
 # 		@_addEvents()
 # 		@_setInited()
 # 		@_trigger 'b-inited'
 # 		return
-# 
+#
 # 	_addEvents: ->
 # 		decl = $$.decls[@name]
 # 		events = decl.events
@@ -70,14 +73,14 @@ class window.Block
 # 				if typeof handler == 'string'
 # 					handler = decl.methods[handler]
 # 				@$node.on p[0], p[1], handler.bind(@)
-# 
+#
 # 	_setInited:->
-# 		
+#
 # 	setMod: (mod, value) ->
-# 		
+#
 # 	_trigger: (event) ->
 # 		@$node.trigger event
-# 
+#
 # 	destroy: ->
 # 		$$.cache[@id] = null
 # 		@$node.off()
