@@ -48,8 +48,6 @@ $bemModifierSeparator: '--'
 		#{$block}:hover
 			@content
 
-//.b-subscribe-form__form--submit_field
-
 =e($element) 
 	$selector: &
 	@at-root
@@ -62,6 +60,11 @@ $bemModifierSeparator: '--'
 			#{$selector+$bemElementSeparator+$element}
 				@content
 
+=es($elements...)
+	@each $element in $elements
+		+e($element)
+			@content
+			
 =m($modifier)
 	@at-root
 		#{&}#{$bemModifierSeparator+$modifier}

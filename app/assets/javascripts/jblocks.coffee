@@ -26,7 +26,10 @@ window.$$ =
 		tag = o.tag || 'div'
 		$e = $("<#{tag} class='b-#{b_name}__#{e_name}'>")
 		$$.processOptions($e, b_name, o)
-		$parent.append $e
+		if o.prepend
+			$parent.prepend $e
+		else
+			$parent.append $e
 		$e
 			
 	makeBlock: (b_name, o) ->
