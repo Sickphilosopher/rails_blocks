@@ -41,7 +41,8 @@ module BlockHelper
 	end
 	
 	def e(e_name, options = {}, &block)
-		raise RailsBlocks::NoBlockContextError if (parent_block = context_block).nil?
+		parent_block = options[:b] || context_block
+		raise RailsBlocks::NoBlockContextError unless parent_block
 		options = page_options.merge options
 		options[:parent_block] = parent_block
 		template = element_template parent_block, e_name, options
