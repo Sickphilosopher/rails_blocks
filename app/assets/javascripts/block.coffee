@@ -45,6 +45,11 @@ class window.Block
 		
 	delMod: (mod, value) ->
 		@$node.delMod(mod, value)
+	
+	hasMod: (mod, value) ->
+		mod = $$.makeMod(mod, value)
+		@$node.hasClass("b-#{@name}--#{mod}")
+		
 # class window.Block
 # 	constructor: ($b) ->
 # 		name = $b.getBlockName()
