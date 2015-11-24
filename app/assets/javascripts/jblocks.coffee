@@ -18,6 +18,8 @@ window.$$ =
 				$dom.prop(attr, attr_value)
 		if o.content
 			$dom.html(o.content)
+		if o.mix
+			$dom.addClass($$.mixClass(o.mix))
 		if o.elements
 			for e_name, e_o of o.elements
 				$$.makeElement($dom, b_name, e_name, e_o)
@@ -63,6 +65,9 @@ window.$$ =
 		mod = name
 		mod += "_#{value}" if value
 		mod
+		
+	mixClass: (mix) ->
+		"b-#{mix.b}__#{mix.e}"
 			
 $.fn.destroyBlocks = ->
 	@find($$.bem_class_selector).getBlocks().each ->
