@@ -78,3 +78,10 @@ $bemModifierSeparator: '--'
 				background-position: -($i - 1)*$width (-$height)
 			&:active
 				background-position: -($i - 1) * $width (-2 * $height)
+				
+@function block-image-url($level, $image)
+	$selector: &
+	$block: getBlock($selector)
+	//2 - '.' and next
+	$block: str-slice($block, str-length($bemBlockPrefix) + 2)
+	@return image-url("#{$level}/#{$block}/images/#{$image}")

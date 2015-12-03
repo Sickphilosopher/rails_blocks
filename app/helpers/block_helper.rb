@@ -50,6 +50,14 @@ module BlockHelper
 		element(classes, template, options, &block)
 	end
 	
+	def e_classes(e_name, options = {})
+		parent_block = options[:b] || context_block
+		raise RailsBlocks::NoBlockContextError unless parent_block
+		options = page_options.merge options
+		options[:parent_block] = parent_block
+		element_classes(parent_block, e_name, options)
+	end
+	
 	def element(classes, template, options, &block)
 		content = block ? capture(&block) : options[:content]
 		@attrs = {class: classes.join(' ')}
