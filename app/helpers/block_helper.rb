@@ -33,6 +33,16 @@ module BlockHelper
 		result
 	end
 	
+	def b_classes(b_name, options = {})
+		parent_block = context_block
+		push_context_block b_name
+		options = page_options.merge options
+		options[:parent_block] = parent_block if parent_block
+		classes = block_classes b_name, options
+		pop_context_block
+		classes
+	end
+	
 	def b_context(b_name, &block)
 		push_context_block b_name
 		result = capture(&block)
