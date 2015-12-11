@@ -86,3 +86,8 @@ $.fn.delMod = (name, value) ->
 		@removeClass("b-#{@b_name}__#{@e_name}--#{mod}")
 	else
 		@removeClass("b-#{@b_name}--#{mod}")
+		
+$.fn.asBlock = (name, o) ->
+	@addClass("b-#{name}")
+	@data('bem', o)
+	$$.getBlocks(@)
