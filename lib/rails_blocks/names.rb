@@ -10,23 +10,6 @@ module RailsBlocks
 			classes(base_class, options)
 		end
 		
-		def mix_classes(mixes, context_block)
-			mixes = [mixes] unless mixes.is_a? Array
-			mixes.map do |mix|
-				if mix[:e]
-					raise RailsBlocks::BadMixError if context_block.nil? && !mix[:b]
-					if mix[:b]
-						element_classes(mix[:b].to_s, mix[:e].to_s, mix)
-					else
-						element_classes(context_block, mix[:e].to_s, mix)
-					end
-				else
-					raise RailsBlocks::BadMixError if mix[:b].nil?
-					block_classes(mix[:b].to_s, mix)
-				end
-			end
-		end
-		
 		private
 			def classes(base_class, options = {})
 				classes = [base_class]
@@ -35,6 +18,23 @@ module RailsBlocks
 				classes |= Array(options[:class]) if options[:class]
 				classes << RailsBlocks.config.js_class if options[:js]
 				classes
+			end
+			
+			def mix_classes(mixes, context_block = nil)
+				mixes = [mixes] unless mixes.is_a? Array
+				mixes.map do |mix|
+					if mix[:e]
+						raise RailsBlocks::BadMixError if context_block.nil? && !mix[:b]
+						if mix[:b]
+							element_classes(mix[:b].to_s, mix[:e].to_s, mix)
+						else
+							element_classes(context_block, mix[:e].to_s, mix)
+						end
+					else
+						raise RailsBlocks::BadMixError if mix[:b].nil?
+						block_classes(mix[:b].to_s, mix)
+					end
+				end.inject(&:|)
 			end
 			
 			def mods_classes(base_class, mods)
