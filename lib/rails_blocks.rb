@@ -23,8 +23,9 @@ module RailsBlocks
 	def self.tree
 		@tree ||= (
 			t = {}
-			Dir[blocks_dir + '**/*.slim'].map do |file|
-				file.gsub! blocks_dir.to_s + '/', ''
+			p blocks_dir
+			Dir["#{blocks_dir}**/*#{RailsBlocks.config.template_engine}"].map do |file|
+				file.sub! blocks_dir.to_s + '/', ''
 				parts = file.split('/')
 				template = {
 					level: parts[0],

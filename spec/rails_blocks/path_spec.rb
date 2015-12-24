@@ -1,14 +1,10 @@
 describe RailsBlocks::Path do
 	include RailsBlocks::Path
-	before :each do
-		RailsBlocks.configure do |c|
-			c.levels = %w(test)
-		end
-	end
+	let(:options) { {levels: %w(level1 level2)} }
 	
 	context '.block_template' do
 		it 'returns nil if block dir not found' do
-			template = block_template 'test-block'
+			template = block_template 'test-block', options
 			expect(template).to be_nil
 		end
 		

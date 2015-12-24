@@ -65,7 +65,7 @@ module BlockHelper
 		raise RailsBlocks::NoBlockContextError unless parent_block
 		options = page_options.merge options
 		options[:parent_block] = parent_block
-		element_classes(parent_block, e_name, options)
+		element_classes(parent_block, e_name, options).join(' ')
 	end
 	
 	def element(classes, template, options, &block)

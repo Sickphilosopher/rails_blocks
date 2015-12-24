@@ -13,7 +13,8 @@ module RailsBlocks
 		end
 		
 		config.to_prepare do
-			ApplicationController.helper(BlockHelper)
+			ActionView::Base.send :include, BlockHelper
+			#ApplicationController.helper(BlockHelper)
 		end
 		
 		ActiveSupport.on_load :action_controller do
