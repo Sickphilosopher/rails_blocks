@@ -1,5 +1,15 @@
 module RailsBlocks
 	module Path
+		class << self
+			attr_writer :tree
+		end
+
+		def self.tree
+			return build_tree if Rails.env.development?
+			@tree ||= (
+				build_tree
+			)
+		end
 		
 		def blocks_dir
 			Rails.root.join RailsBlocks.config.blocks_dir
@@ -9,18 +19,18 @@ module RailsBlocks
 			options[:levels].reverse.each do |level|
 				p level
 				p b_name
-				p RailsBlocks.tree
-				next unless RailsBlocks.tree[level][b_name]
-				return RailsBlocks.tree[level][b_name][mod(options)] if RailsBlocks.tree[level][b_name][mod(options)]
-				return RailsBlocks.tree[level][b_name]['']
+				p Path.tree
+				next unless Path.tree[level][b_name]
+				return Path.tree[level][b_name][mod(options)] if Path.tree[level][b_name][mod(options)]
+				return Path.tree[level][b_name]['']
 			end
 			nil
 		end
 		
 		def element_template(b_name, e_name, options = {})
 			options[:levels].reverse.each do |level|
-				next unless RailsBlocks.tree[level][b_name]
-				return RailsBlocks.tree[level][b_name]["_#{e_name}"] if RailsBlocks.tree[level][b_name]["_#{e_name}"]
+				next unless Path.tree[level][b_name]
+				return Path.tree[level][b_name]["_#{e_name}"] if Path.tree[level][b_name]["_#{e_name}"]
 			end
 			nil
 		end
@@ -46,6 +56,24 @@ module RailsBlocks
 					end
 				end
 				nil
+			end
+			
+			def build_tree
+				t = {}
+				files = Dir["#{blocks_dir}/**/*#{RailsBlocks.config.template_engine}"]
+				files.each do |file|
+					file.sub! blocks_dir.to_s + '/', ''
+					parts = file.split('/')
+					template = {
+						level: parts[0],
+						block: parts[1],
+						file: parts[2].gsub('.slim', '')
+					}
+					t[template[:level]] ||= {}
+					t[template[:level]][template[:block]] ||= {}
+					t[template[:level]][template[:block]][get_mod(file)] = file
+				end
+				t.freeze
 			end
 	end
 end
