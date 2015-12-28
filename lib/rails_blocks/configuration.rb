@@ -8,6 +8,12 @@ module RailsBlocks
 		attr_accessor :modifier_separator
 		attr_accessor :js_class
 		
+		def ns(name)
+			@ns ||= {}
+			ns_config = @ns[name] ||= Configuration.new
+			yield ns_config
+		end
+		
 		def initialize
 			@prefix = 'b-'
 			@blocks_dir = 'app/blocks'

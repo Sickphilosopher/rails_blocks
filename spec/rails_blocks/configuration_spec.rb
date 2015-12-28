@@ -1,15 +1,29 @@
 describe RailsBlocks::Configuration do
+	subject { RailsBlocks::Configuration.new }
 	describe "#prefix" do
 		it "default value is 'b-'" do
-			expect(RailsBlocks::Configuration.new.prefix).to eq 'b-'
+			expect(subject.prefix).to eq 'b-'
 		end
 	end
 
 	describe "#prefix=" do
 		it "can set value" do
-			config = RailsBlocks::Configuration.new
-			config.prefix = 't-'
-			expect(config.prefix).to eq 't-'
+			subject.prefix = 't-'
+			expect(subject.prefix).to eq 't-'
+		end
+	end
+	
+	describe "#ns" do
+		it 'yield new Configuration' do
+			subject.ns :admin do |config|
+				expect(config).to be_a RailsBlocks::Configuration
+			end
+		end
+		
+		it 'creates new namespace' do
+			subject.ns :admin do |config|
+				expect(config.nss).not_to be_empty
+			end
 		end
 	end
 end
