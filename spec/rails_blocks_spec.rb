@@ -50,6 +50,14 @@ describe RailsBlocks do
 			
 			expect(RailsBlocks.config.modifier_separator).to eq 'sepa'
 		end
+		
+		it "set modifier_separator for bem" do
+			RailsBlocks.configure do |config|
+				config.modifier_separator = 'sepa'
+			end
+			
+			expect(RailsBlocks.config.modifier_separator).to eq 'sepa'
+		end
 	end
 	
 	describe ".reset" do

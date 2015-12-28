@@ -5,13 +5,13 @@ module RailsBlocks
 		end
 
 		def self.tree
-			return build_tree if Rails.env.development?
+			return build_tree unless Rails.env.production?
 			@tree ||= (
 				build_tree
 			)
 		end
 		
-		def blocks_dir
+		def self.blocks_dir
 			Rails.root.join RailsBlocks.config.blocks_dir
 		end
 		
@@ -20,6 +20,7 @@ module RailsBlocks
 				p level
 				p b_name
 				p Path.tree
+				p 'test'
 				next unless Path.tree[level][b_name]
 				return Path.tree[level][b_name][mod(options)] if Path.tree[level][b_name][mod(options)]
 				return Path.tree[level][b_name]['']
@@ -50,7 +51,7 @@ module RailsBlocks
 			
 			def get_block_dir(b_name, levels)
 				levels.reverse.each do |level|
-					block_dir = File.join(blocks_dir, level, b_name)
+					block_dir = File.join(self.blocks_dir, level, b_name)
 					if Dir.exists? block_dir
 						return block_dir
 					end
@@ -58,7 +59,7 @@ module RailsBlocks
 				nil
 			end
 			
-			def build_tree
+			def self.build_tree
 				t = {}
 				files = Dir["#{blocks_dir}/**/*#{RailsBlocks.config.template_engine}"]
 				files.each do |file|
@@ -74,6 +75,12 @@ module RailsBlocks
 					t[template[:level]][template[:block]][get_mod(file)] = file
 				end
 				t.freeze
+			end
+			
+			def self.get_mod(file)
+				return '' unless file.include? '_'
+				file.match(/_(.*)\./)
+				$1
 			end
 	end
 end

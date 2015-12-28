@@ -1,3 +1,3 @@
 module RailsBlocks
-	VERSION = "0.3.10"
+	VERSION = "0.3.12"
 end

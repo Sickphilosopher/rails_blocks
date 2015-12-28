@@ -1,6 +1,6 @@
 describe RailsBlocks::Path do
 	include RailsBlocks::Path
-	let(:options) { {levels: %w(level1 level2)} }
+	let(:options) { {} }
 	
 	context '.block_template' do
 		it 'returns nil if block dir not found' do
