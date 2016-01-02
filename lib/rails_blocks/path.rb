@@ -5,7 +5,7 @@ module RailsBlocks
 		end
 
 		def self.tree
-			return build_tree unless Rails.env.production?
+			return build_tree if Rails.env.development?
 			@tree ||= (
 				build_tree
 			)
@@ -17,10 +17,6 @@ module RailsBlocks
 		
 		def block_template(b_name, options = {})
 			options[:levels].reverse.each do |level|
-				p level
-				p b_name
-				p Path.tree
-				p 'test'
 				next unless Path.tree[level][b_name]
 				return Path.tree[level][b_name][mod(options)] if Path.tree[level][b_name][mod(options)]
 				return Path.tree[level][b_name]['']
