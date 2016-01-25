@@ -12,9 +12,9 @@ class window.Block
 		# 		@_addEvents(element)
 		@init() if @init
 	
-	elem: (e_name, mod_name, mod_value) ->
+	elem: (e_name, mod_name, mod_value, context) ->
 		klass = ".b-#{@name}__#{e_name}"
-		$elem = $(klass, @$node)
+		$elem = $(klass, context || @$node)
 		if mod_name
 			$elem = $elem.filter("#{klass}--#{$$.makeMod(mod_name, mod_value)}")
 		 

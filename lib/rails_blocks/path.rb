@@ -5,7 +5,8 @@ module RailsBlocks
 		end
 
 		def self.tree
-			return build_tree if Rails.env.development?
+			#so slow, переделать на оновление при запросе, а не каждый раз
+			#return build_tree if Rails.env.development?
 			@tree ||= (
 				build_tree
 			)
