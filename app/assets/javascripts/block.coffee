@@ -46,6 +46,12 @@ class window.Block
 	delMod: (mod, value) ->
 		@$node.delMod(mod, value)
 	
+	toogleMod: (mod, value) ->
+		if @hasMod(mod, value)
+			@$node.delMod(mod, value)
+		else
+			@$node.addMod(mod, value)
+
 	hasMod: (mod, value) ->
 		mod = $$.makeMod(mod, value)
 		@$node.hasClass("b-#{@name}--#{mod}")
