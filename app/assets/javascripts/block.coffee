@@ -46,7 +46,7 @@ class window.Block
 	delMod: (mod, value) ->
 		@$node.delMod(mod, value)
 	
-	toogleMod: (mod, value) ->
+	toggleMod: (mod, value) ->
 		if @hasMod(mod, value)
 			@$node.delMod(mod, value)
 		else
