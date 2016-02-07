@@ -24,6 +24,13 @@ $bemModifierSeparator: '--'
 	@else
 		@return false
 		
+@function containsElement($selector)
+	$selector: selectorToString($selector)
+	@if str-index($selector, $bemElementSeparator)
+		@return true
+	@else
+		@return false
+		
 @function getBlock($selector)
 	$selector: selectorToString($selector)
 	$elementStart: str-index($selector, $bemElementSeparator)
@@ -82,6 +89,6 @@ $bemModifierSeparator: '--'
 @function block-image-url($level, $image)
 	$selector: &
 	$selector: selectorToString($selector)
-	$block: if(containsModifier($selector) or containsPseudo($selector), getBlock($selector), selectorToString($selector))
+	$block: if(containsModifier($selector) or containsPseudo($selector) or containsElement($selector), getBlock($selector), selectorToString($selector))
 	$block: str-slice($block, str-length($bemBlockPrefix) + 1)
 	@return image-url("#{$level}/#{$block}/images/#{$image}")
