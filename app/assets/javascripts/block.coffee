@@ -4,7 +4,7 @@ class window.Block
 		@name = $$.getBlockName($b)
 		@$node.b_name = @name
 		@id = $$.guid()
-		@params = $b.data('bem')
+		@params = $b.data('bem') || {}
 		#$.extend this, decl.methods
 		@_addEvents() if @events
 		# if @elements
