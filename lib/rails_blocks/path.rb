@@ -64,9 +64,8 @@ module RailsBlocks
 				files = Dir["#{blocks_dir}/**/*#{RailsBlocks.config.template_engine}"]
 				files.each do |file|
 					file.sub! blocks_dir.to_s + '/', ''
-					file.sub! RailsBlocks.config.template_engine, ''
 					parts = file.split('/')
-					filename = parts[2]
+					filename = parts[2].sub RailsBlocks.config.template_engine, ''
 					template = {
 						level: parts[0],
 						block: parts[1],

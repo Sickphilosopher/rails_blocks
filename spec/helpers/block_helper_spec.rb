@@ -1,5 +1,8 @@
 describe BlockHelper, type: :helper do
-	include BlockHelper
+	before do
+		controller.add_view_paths
+	end
+
 	context ".b" do
 		it "renders empty div with class when called without options" do
 			result = b :test
@@ -16,6 +19,11 @@ describe BlockHelper, type: :helper do
 		it "renders empty div with mods class when called with mods" do
 			result = b 'test-block', mods: {test: :one}
 			expect(result).to eq '<div class="b-test-block b-test-block--test_one"></div>'
+		end
+		
+		it 'renders file when one exists' do
+			result = b 'block1'
+			expect(result).to eq '<div class="b-block1">block1</div>'
 		end
 	end
 	
