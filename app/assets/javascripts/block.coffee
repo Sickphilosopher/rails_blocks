@@ -4,7 +4,7 @@ class window.Block
 		@name = $$.getBlockName($b)
 		@$node.b_name = @name
 		@id = $$.guid()
-		@params = $b.data('bem')
+		@params = $b.data('bem') || {}
 		#$.extend this, decl.methods
 		@_addEvents() if @events
 		# if @elements
@@ -12,9 +12,9 @@ class window.Block
 		# 		@_addEvents(element)
 		@init() if @init
 	
-	elem: (e_name, mod_name, mod_value) ->
+	elem: (e_name, mod_name, mod_value, context) ->
 		klass = ".b-#{@name}__#{e_name}"
-		$elem = $(klass, @$node)
+		$elem = $(klass, context || @$node)
 		if mod_name
 			$elem = $elem.filter("#{klass}--#{$$.makeMod(mod_name, mod_value)}")
 		 
@@ -46,6 +46,12 @@ class window.Block
 	delMod: (mod, value) ->
 		@$node.delMod(mod, value)
 	
+	toggleMod: (mod, value) ->
+		if @hasMod(mod, value)
+			@$node.delMod(mod, value)
+		else
+			@$node.addMod(mod, value)
+
 	hasMod: (mod, value) ->
 		mod = $$.makeMod(mod, value)
 		@$node.hasClass("b-#{@name}--#{mod}")

@@ -78,13 +78,21 @@ module BlockHelper
 		template.nil? ? empty(content) : render(file: template, locals: {content: content, options: options})
 	end
 	
+	#убрать после тестов производительности
+	# def empty(content)
+	# 	atrrs = @attrs.except(:tag).map do |key, value|
+	# 		key.to_s + '=\'' + value.to_s + "'"
+	# 	end
+	# 	"<#{@attrs[:tag]} #{atrrs.join(' ')}>#{content}</#{@attrs[:tag]}>".html_safe
+	# end
+	
 	def empty(content)
-		atrrs = @attrs.except(:tag).map do |key, value|
-			key.to_s + '=\'' + value.to_s + "'"
-		end
-		"<#{@attrs[:tag]} #{atrrs.join(' ')}>#{content}</#{@attrs[:tag]}>".html_safe
+		content_tag bem_tag, content, bem_attrs_without_tag
 	end
 	
+	def bem_tag
+		@attrs[:tag]
+	end
 	
 	def bem_attrs
 		@attrs
