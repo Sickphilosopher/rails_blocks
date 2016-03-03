@@ -75,7 +75,7 @@ module BlockHelper
 		@attrs["data-bem"] = options[:data].to_json if options[:data]
 		@attrs[:tag] = options[:tag] || 'div'
 		
-		template.nil? ? empty(content) : render(file: template, locals: {content: content, options: options})
+		template.nil? ? empty(content) : render(file: template, format: RailsBlocks.config.template_engine, locals: {content: content, options: options})
 	end
 	
 	#убрать после тестов производительности
