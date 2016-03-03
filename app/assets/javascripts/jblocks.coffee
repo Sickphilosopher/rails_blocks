@@ -35,6 +35,7 @@ window.$$ =
 		$e
 			
 	makeBlock: (b_name, o) ->
+		o ||= {}
 		tag = o.tag || 'div'
 		$b = $("<#{tag} class='b-#{b_name}'>")
 		$$.processOptions($b, b_name, o)

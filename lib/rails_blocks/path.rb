@@ -1,5 +1,10 @@
+require 'rails_blocks/names'
 module RailsBlocks
 	module Path
+		include RailsBlocks::Names
+		ELEMENT_FILE_PREFIX = '__'
+		MOD_FILE_PREFIX = '_'
+		
 		class << self
 			attr_writer :tree
 		end
@@ -19,8 +24,7 @@ module RailsBlocks
 		def block_template(b_name, options = {})
 			options[:levels].reverse.each do |level|
 				next unless Path.tree[level][b_name]
-				return Path.tree[level][b_name][mod(options)] if Path.tree[level][b_name][mod(options)]
-				return Path.tree[level][b_name]['']
+				return Path.tree[level][b_name][mod(options)] || Path.tree[level][b_name]['']
 			end
 			nil
 		end
@@ -28,7 +32,8 @@ module RailsBlocks
 		def element_template(b_name, e_name, options = {})
 			options[:levels].reverse.each do |level|
 				next unless Path.tree[level][b_name]
-				return Path.tree[level][b_name]["_#{e_name}"] if Path.tree[level][b_name]["_#{e_name}"]
+				next unless Path.tree[level][b_name][:elements][e_name]
+				return Path.tree[level][b_name][:elements][e_name][mod(options)] || Path.tree[level][b_name][:elements][e_name]['']
 			end
 			nil
 		end
@@ -38,12 +43,6 @@ module RailsBlocks
 			def mod(options)
 				return '' unless options[:mods] && !options[:mods].empty?
 				mod_class(*options[:mods].first)
-			end
-			
-			def mod_path(dir, name, options)
-				return nil unless options[:mods]
-				path = File.join dir, name + '_' + mod_class(*options[:mods].first) + RailsBlocks.config.template_engine
-				File.exists?(path) ? path : nil
 			end
 			
 			def get_block_dir(b_name, levels)
@@ -57,26 +56,53 @@ module RailsBlocks
 			end
 			
 			def self.build_tree
+				file_tree
+			end
+			
+			def self.file_tree
 				t = {}
 				files = Dir["#{blocks_dir}/**/*#{RailsBlocks.config.template_engine}"]
 				files.each do |file|
 					file.sub! blocks_dir.to_s + '/', ''
+					file.sub! RailsBlocks.config.template_engine, ''
 					parts = file.split('/')
+					filename = parts[2]
 					template = {
 						level: parts[0],
 						block: parts[1],
-						file: parts[2].gsub('.slim', '')
+						file: filename
 					}
 					t[template[:level]] ||= {}
-					t[template[:level]][template[:block]] ||= {}
-					t[template[:level]][template[:block]][get_mod(file)] = file
+					t[template[:level]][template[:block]] ||= {elements: {}}
+					
+					if is_e_file(filename)
+						t[template[:level]][template[:block]][:elements][get_e_name(filename)] ||= {}
+						t[template[:level]][template[:block]][:elements][get_e_name(filename)][get_e_mod(filename)] = file
+					else
+						t[template[:level]][template[:block]][get_b_mod(filename)] = file
+					end
 				end
-				t.freeze
+				t.with_indifferent_access.freeze
 			end
 			
-			def self.get_mod(file)
-				return '' unless file.include? '_'
-				file.match(/_(.*)\./)
+			def self.is_e_file(file)
+				file.start_with? ELEMENT_FILE_PREFIX
+			end
+			
+			def self.get_e_name(file)
+				file.match(/\A__([^_]*)/)
+				$1
+			end
+			
+			def self.get_e_mod(file)
+				return '' unless file.match(/__\w+#{MOD_FILE_PREFIX}\w/)
+				file.match(/\A__(?:[^_]*)_(.*)/)
+				$1
+			end
+			
+			def self.get_b_mod(file)
+				return '' unless file.start_with? MOD_FILE_PREFIX
+				file.match(/^_(.*)/)
 				$1
 			end
 	end

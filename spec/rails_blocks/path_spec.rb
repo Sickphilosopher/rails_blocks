@@ -1,6 +1,6 @@
 describe RailsBlocks::Path do
 	include RailsBlocks::Path
-	let(:options) { {} }
+	let(:options) { {levels: [:common, :app]} }
 	
 	context '.block_template' do
 		it 'returns nil if block dir not found' do
@@ -8,24 +8,28 @@ describe RailsBlocks::Path do
 			expect(template).to be_nil
 		end
 		
-		
 		context 'when template exists' do
 			it 'returns path when template exists' do
-				template = block_template 'simple-block-with-template'
-				expect(template).to eq Rails.root.join('app', 'blocks', 'test', 'simple-block-with-template', 'simple-block-with-template.slim').to_s
+				template = block_template 'block1', options
+				expect(template).to eq 'common/block1/block1'
 			end
 			
 			context 'when modified template exists' do
-				it 'returns path of modified template' do
-					template = block_template 'modified-block-with-template', mods: {test: :one}
-					expect(template).to eq Rails.root.join('app', 'blocks', 'test', 'modified-block-with-template', 'modified-block-with-template_test_one.slim').to_s
+				it 'returns path of template with simple mod' do
+					template = block_template 'block1', options.merge(mods: {mod1: true})
+					expect(template).to eq 'common/block1/_mod1'
+				end
+				
+				it 'returns path of template with key_value mod' do
+					template = block_template 'block1', options.merge(mods: {mod2: 'value2'})
+					expect(template).to eq 'common/block1/_mod2_value2'
 				end
 			end
 			
 			context 'when modified template not exists' do
 				it 'returns path of original template' do
-					template = block_template 'simple-block-with-template', mods: {test: :one}
-					expect(template).to eq Rails.root.join('app', 'blocks', 'test', 'simple-block-with-template', 'simple-block-with-template.slim').to_s
+					template = block_template 'block1', options.merge(mods: {mod1: 'not-exists'})
+					expect(template).to eq 'common/block1/block1'
 				end
 			end
 		end
@@ -33,32 +37,32 @@ describe RailsBlocks::Path do
 	
 	context '.element_template' do |variable|
 		it 'returns nil if block dir not found' do
-			template = element_template 'test', 'test'
+			template = element_template 'not-found', 'test', options
 			expect(template).to be_nil
 		end
 		
 		it 'returns nil if block dir found but template not' do
-			template = element_template 'elements-test', 'no-test'
+			template = element_template 'block1', 'not-exist-e', options
 			expect(template).to be_nil
 		end
 		
 		context 'when template exists' do
 			it 'returns path when element template exists' do
-				template = element_template 'elements-test', 'element2'
-				expect(template).to eq Rails.root.join('app', 'blocks', 'test', 'elements-test', '__element2.slim').to_s
+				template = element_template 'block2', 'elem1', options
+				expect(template).to eq 'common/block2/__elem1'
 			end
 			
 			context 'when modified template exists' do
 				it 'returns path of modified template' do
-					template = element_template 'elements-test', 'element2', mods: {type: :one}
-					expect(template).to eq Rails.root.join('app', 'blocks', 'test', 'elements-test', '__element2_type_one.slim').to_s
+					template = element_template 'block2', 'elem1', options.merge(mods: {mod1: true})
+					expect(template).to eq 'common/block2/__elem1_mod1'
 				end
 			end
 			
 			context 'when modified template not exists' do
 				it 'returns path of original template' do
-					template = element_template 'elements-test', 'element', mods: {type: :one}
-					expect(template).to eq Rails.root.join('app', 'blocks', 'test', 'elements-test', '__element.slim').to_s
+					template = element_template 'block2', 'elem1', options.merge(mods: {mod3: 'not-exist'})
+					expect(template).to eq 'common/block2/__elem1'
 				end
 			end
 		end
