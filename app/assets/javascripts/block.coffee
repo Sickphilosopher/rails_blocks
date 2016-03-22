@@ -1,10 +1,10 @@
 class window.Block
-	constructor: ($b) ->
+	constructor: ($b, options) ->
 		@$node = $b
 		@name = $$.getBlockName($b)
 		@$node.b_name = @name
 		@id = $$.guid()
-		@params = $b.data('bem') || {}
+		@params = $.extend({}, $b.data('bem'), options)
 		#$.extend this, decl.methods
 		@_addEvents() if @events
 		# if @elements

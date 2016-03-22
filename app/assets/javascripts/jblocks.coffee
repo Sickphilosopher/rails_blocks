@@ -45,18 +45,20 @@ window.$$ =
 		$$.getBlocks($context.find($$.bem_class_selector))
 		$$.getBlocks($context) if $context.hasClass $$.bem_class
 		
-	getBlocks: ($context) ->
+	getBlocks: ($context, options) ->
 		$context.map ->
-			$b = $(this)
-			bid = $b.data('_bid')
-			if bid
-				return $$.cache[bid]
-			block = new $$.decls[camelCase($$.getBlockName($b))]($b)
-			bid = block.id
-			$b.data '_bid', bid
-			$$.cache[bid] = block
-			block
-			
+			$$.getBlock($(this), options)
+	
+	getBlock: ($b, options)->
+		bid = $b.data('_bid')
+		if bid
+			return $$.cache[bid]
+		block = new $$.decls[camelCase($$.getBlockName($b))]($b, options)
+		bid = block.id
+		$b.data '_bid', bid
+		$$.cache[bid] = block
+		block
+		
 	getBlockName: ($b) ->
 		regexp = /^b(-[a-zA-Z0-9]+)+$/
 		for klass in $b.attr('class').split(/\s+/)
@@ -90,5 +92,4 @@ $.fn.delMod = (name, value) ->
 		
 $.fn.asBlock = (name, o) ->
 	@addClass("b-#{name}")
-	@data('bem', o)
-	$$.getBlocks(@)
+	$$.getBlock(@, o)
