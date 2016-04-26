@@ -20,7 +20,7 @@ describe RailsBlocks::Configuration do
 			end
 		end
 		
-		it 'creates new namespace' do
+		xit 'creates new namespace' do
 			subject.ns :admin do |config|
 				expect(config.nss).not_to be_empty
 			end
