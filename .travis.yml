@@ -9,3 +9,6 @@ deploy:
   on:
     tags: true
     repo: Sickphilosopher/rails_blocks
+branches:
+  only:
+    - master
