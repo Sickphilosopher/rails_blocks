@@ -11,25 +11,25 @@ describe RailsBlocks::Path do
 		context 'when template exists' do
 			it 'returns path when template exists' do
 				template = block_template 'block1', options
-				expect(template).to eq 'common/block1/block1'
+				expect(template).to eq "common/block1/block1#{RailsBlocks.config.template_engine}"
 			end
 			
 			context 'when modified template exists' do
 				it 'returns path of template with simple mod' do
 					template = block_template 'block1', options.merge(mods: {mod1: true})
-					expect(template).to eq 'common/block1/_mod1'
+					expect(template).to eq "common/block1/_mod1#{RailsBlocks.config.template_engine}"
 				end
 				
 				it 'returns path of template with key_value mod' do
 					template = block_template 'block1', options.merge(mods: {mod2: 'value2'})
-					expect(template).to eq 'common/block1/_mod2_value2'
+					expect(template).to eq "common/block1/_mod2_value2#{RailsBlocks.config.template_engine}"
 				end
 			end
 			
 			context 'when modified template not exists' do
 				it 'returns path of original template' do
 					template = block_template 'block1', options.merge(mods: {mod1: 'not-exists'})
-					expect(template).to eq 'common/block1/block1'
+					expect(template).to eq "common/block1/block1#{RailsBlocks.config.template_engine}"
 				end
 			end
 		end
@@ -49,20 +49,20 @@ describe RailsBlocks::Path do
 		context 'when template exists' do
 			it 'returns path when element template exists' do
 				template = element_template 'block2', 'elem1', options
-				expect(template).to eq 'common/block2/__elem1'
+				expect(template).to eq "common/block2/__elem1#{RailsBlocks.config.template_engine}"
 			end
 			
 			context 'when modified template exists' do
 				it 'returns path of modified template' do
 					template = element_template 'block2', 'elem1', options.merge(mods: {mod1: true})
-					expect(template).to eq 'common/block2/__elem1_mod1'
+					expect(template).to eq "common/block2/__elem1_mod1#{RailsBlocks.config.template_engine}"
 				end
 			end
 			
 			context 'when modified template not exists' do
 				it 'returns path of original template' do
 					template = element_template 'block2', 'elem1', options.merge(mods: {mod3: 'not-exist'})
-					expect(template).to eq 'common/block2/__elem1'
+					expect(template).to eq "common/block2/__elem1#{RailsBlocks.config.template_engine}"
 				end
 			end
 		end
