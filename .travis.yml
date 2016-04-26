@@ -7,5 +7,4 @@ deploy:
     secure: dwzb8NAPqnWOjaMHbUCFdLfE89P+t6n+xc/4ry66jHIWOKgCh1SQdYtJ1N6SUYr+nKpX+9e3XHfUwFp6OsNrieYfCnRBpupkZ5ty9OE1YrEGD328obP2ujc1rGTzp4SD967Wv6Mqu73+mNaP0Ba2u3QlVF89kIMPSg0fE3ozSjC1z/7fqs4D84fZh/FTLfAFDMqkvrlxLx5cmLuSzZ9cm5OT+gFGQDzCtcGBOCcou8uM16OoAEQjtnZKFvfYNFQCE5ne/emscbTViXNtImBbOrf1s4noUUJB/uoO952KxsJ5nWB5TeAst9M4Qd359MiLqTd84upM5ROPVjeEXCFHD5oIXZgIU68NX7Krh9C/fvWm29iopMc1khq2LRp7/ZpLSNAdnzWzAC58RBmbuYaKVRpzBpfZON3SDXT39VwNPV9p/axBCs9Z1WXlPJ3JR4ccVlM5pkGFCNN3lVtxG3tjL/ywL++fib1/dfkLTD/HCs9QXa0D/QtvyGzf5RdKPwFaW+VJwYmlNDt7m/H66zM0/IDlOp/e86/JnnNNs3aNfL1pDuPooos6dSNKWo2m0C4gu2yr2Xy+Ijz/nw+UMXTianrSDYUwa578Xu3k0d1Pnp7jWBWR7KUz2Wvv0tKQHHCkSU2cjArcZ7nxkVw5kKBEX9+6dp9CoREridrsVnL/9BU=
   gem: rails_blocks
   on:
-    tags: true
     repo: Sickphilosopher/rails_blocks

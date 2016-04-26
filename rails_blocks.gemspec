@@ -6,6 +6,7 @@ require 'rails_blocks/version'
 Gem::Specification.new do |spec|
 	spec.name					= 'rails_blocks'
 	spec.version			 = RailsBlocks::VERSION
+	spec.version = 		"#{spec.version}-alpha-#{ENV['TRAVIS_BUILD_NUMBER']}" if ENV['TRAVIS']
 	spec.authors			 = ['Andrey Potetiurin']
 	spec.email				 = ['potetiurin@gmail.com']
 	spec.summary			 = 'Rails plugin for work with some modification of BEM methodology'
