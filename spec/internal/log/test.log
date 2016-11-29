@@ -6,3 +6,14 @@
   Rendered app/blocks/common/block1/block1.slim (17.0ms)
   Rendered app/blocks/common/block1/block1.slim (16.0ms)
   Rendered app/blocks/common/block1/block1.slim (20.0ms)
+------------------------------------------------{:levels=>[:common, :app], :parent_block=>nil}-------------------------------{:type=>:block, :name=>:test}
+------------------------------------------------{:levels=>[:common, :app], :parent_block=>nil}-------------------------------{:type=>:block, :name=>"test-block"}
+------------------------------------------------{:levels=>[:common, :app], :mods=>{:test=>:one}, :parent_block=>nil}-------------------------------{:type=>:block, :name=>"test-block"}
+------------------------------------------------{:levels=>[:common, :app], :parent_block=>nil}-------------------------------{:type=>:block, :name=>"block1"}
+  Rendered app/blocks/common/block1/block1.slim (11.5ms)
+------------------------------------------------{:levels=>[:common, :app], :parent_block=>"test"}-------------------------------{:type=>:elem, :name=>:element}
+------------------------------------------------{:levels=>[:common, :app], :parent_block=>nil}-------------------------------{:type=>:block, :name=>"test"}
+------------------------------------------------{:levels=>[:common, :app], :mods=>{:test=>:boo, :test2=>true}, :parent_block=>"test"}-------------------------------{:type=>:elem, :name=>"element"}
+------------------------------------------------{:levels=>[:common, :app], :parent_block=>nil}-------------------------------{:type=>:block, :name=>"test"}
+------------------------------------------------{:levels=>[:common, :app], :parent_block=>"test"}-------------------------------{:type=>:elem, :name=>"element"}
+------------------------------------------------{:levels=>[:common, :app], :parent_block=>nil}-------------------------------{:type=>:block, :name=>"test"}
