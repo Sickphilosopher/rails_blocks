@@ -2,12 +2,12 @@ module RailsBlocks
 	module Names
 		def element_classes(b_name, e_name, options = {})
 			base_class = element_class b_name, e_name
-			classes(base_class, options) - [RailsBlocks.config.js_class]
+			classes(base_class, false, options)
 		end
 		
 		def block_classes(b_name, options = {})
 			base_class = block_class b_name
-			classes(base_class, options)
+			classes(base_class, true, options)
 		end
 
 		def block_name(b_name)
@@ -19,12 +19,12 @@ module RailsBlocks
 		end
 
 		private
-			def classes(base_class, options = {})
+			def classes(base_class, add_js, options = {})
 				classes = [base_class]
 				classes |= mods_classes(base_class, options[:mods]) unless options[:mods].nil?
 				classes |= mix_classes(options[:mix], options[:parent_block]) if options[:mix]
 				classes |= Array(options[:class]) if options[:class]
-				classes << RailsBlocks.config.js_class if options[:js]
+				classes << RailsBlocks.config.js_class if options[:js] && add_js
 				classes.uniq
 			end
 			

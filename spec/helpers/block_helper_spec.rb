@@ -25,6 +25,26 @@ describe BlockHelper, type: :helper do
 			result = b 'block1'
 			expect(result).to eq '<div class="block1">block1</div>'
 		end
+
+		it 'ads js-bem class and data-bem when js: true' do
+			result = b 'b1', js: true
+			expect(result).to eq '<div class="b1 js-bem" data-bem="{&quot;b1&quot;:{}}"></div>'
+		end
+
+		it 'ads js-bem class and mixed data-bem when js: true in mix' do
+			result = b 'b1', mix: {b: 'b2', js: true}
+			expect(result).to eq '<div class="b1 b2 js-bem" data-bem="{&quot;b2&quot;:{}}"></div>'
+		end
+
+		it 'ads js-bem class and full data-bem when js: true in mix' do
+			result = b 'b1', js: true, mix: {b: 'b2', js: true}
+			expect(result).to eq '<div class="b1 b2 js-bem" data-bem="{&quot;b1&quot;:{},&quot;b2&quot;:{}}"></div>'
+		end
+
+		it 'ads js-bem class and full custom data-bem when js: true in mix' do
+			result = b 'b1', js: {bb1: 'boo'}, mix: {b: 'b2', js: {bb2: 'boo2'}}
+			expect(result).to eq '<div class="b1 b2 js-bem" data-bem="{&quot;b1&quot;:{&quot;bb1&quot;:&quot;boo&quot;},&quot;b2&quot;:{&quot;bb2&quot;:&quot;boo2&quot;}}"></div>'
+		end
 	end
 	
 	context ".e" do
@@ -53,6 +73,25 @@ describe BlockHelper, type: :helper do
 				end
 				expect(result).to eq '<div class="test__element">content</div>'
 			end
+		end
+
+		it 'ads data-bem, but not js-bem class when js: true' do
+			b 'test' do
+				result = e 'e1', js: {test: 2}
+				expect(result).to eq '<div class="test__e1" data-bem="{&quot;test__e1&quot;:{&quot;test&quot;:2}}"></div>'
+			end
+		end
+
+		it 'ads js-bem class and mixed data-bem when js: true in mix with block' do
+			b 'test' do
+				result = e 'e1', mix: {b: 'b1', js: true}
+				expect(result).to eq '<div class="test__e1 b1 js-bem" data-bem="{&quot;b1&quot;:{}}"></div>'
+			end
+		end
+
+		it 'ads js-bem class and full data-bem when js: true in mix' do
+			result = b 'b1', js: true, mix: {b: 'b2', js: true}
+			expect(result).to eq '<div class="b1 b2 js-bem" data-bem="{&quot;b1&quot;:{},&quot;b2&quot;:{}}"></div>'
 		end
 	end
 end
