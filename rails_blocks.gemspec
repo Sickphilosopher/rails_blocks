@@ -28,11 +28,4 @@ Gem::Specification.new do |spec|
 	spec.add_development_dependency 'rspec-rails', '~> 3.0'
 	spec.add_development_dependency 'memfs'
 	spec.add_development_dependency 'spring'
-	spec.add_development_dependency 'guard'
-	spec.add_development_dependency 'guard-rspec'
-	spec.add_development_dependency 'pry'
-	spec.add_development_dependency 'pry-remote'
-	spec.add_development_dependency 'pry-nav'
-	spec.add_development_dependency 'terminal-notifier'
-	spec.add_development_dependency 'terminal-notifier-guard'
 end
