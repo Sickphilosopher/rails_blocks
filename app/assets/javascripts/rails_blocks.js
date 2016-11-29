@@ -1,5 +1,3 @@
-//require 'jquery_bem_copy'
-//=require 'jquery_bem'
+//=require 'bem_blocks'
+//=require 'utils'
 //=require 'block'
-//=require 'jblocks'
-//=require 'main'

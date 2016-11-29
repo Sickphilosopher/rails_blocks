@@ -1,6 +1,5 @@
 module RailsBlocks
 	class Configuration
-		attr_accessor :prefix
 		attr_accessor :blocks_dir
 		attr_accessor :levels
 		attr_accessor :template_engine
@@ -15,13 +14,12 @@ module RailsBlocks
 		end
 		
 		def initialize
-			@prefix = 'b-'
 			@blocks_dir = 'app/blocks'
 			@levels = []
 			@template_engine = '.slim'
 			@element_separator = '__'
 			@modifier_separator = '--'
-			@js_class = 'js_bem'
+			@js_class = 'js-bem'
 		end
 	end
 end

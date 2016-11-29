@@ -5,7 +5,7 @@ describe RailsBlocks::Blocks::Block do
 		b_name = 'test-block'
 		block = RailsBlocks.get_block b_name
 		result = block.render
-		klass = RailsBlocks.config.prefix + b_name
+		klass = b_name
 		expect(result).to match(/<div.*\/div>/) & match(/class=\"#{klass}\"/)
 	end
 end
