@@ -1,9 +1,8 @@
-$bemBlockPrefix: 'b-'
-$bemElementSeparator: '__' 
+$bemElementSeparator: '__'
 $bemModifierSeparator: '--'
 
 @function b-class($block)
-	@return ".#{$bemBlockPrefix+$block}"
+	@return ".#{$block}"
 	
 @function selectorToString($selector)
 	$selector: inspect($selector) //cast to string
@@ -40,7 +39,7 @@ $bemModifierSeparator: '--'
 	@return str-slice($selector, 0, $start)
 
 =b($block)
-	.#{$bemBlockPrefix+$block}
+	.#{$block}
 		@content
 		
 =plus_b
@@ -90,5 +89,4 @@ $bemModifierSeparator: '--'
 	$selector: &
 	$selector: selectorToString($selector)
 	$block: if(containsModifier($selector) or containsPseudo($selector) or containsElement($selector), getBlock($selector), selectorToString($selector))
-	$block: str-slice($block, str-length($bemBlockPrefix) + 1)
 	@return image-url("#{$level}/#{$block}/images/#{$image}")

@@ -3,14 +3,7 @@ require 'rails'
 
 describe RailsBlocks do
 	describe ".configure" do
-		it "set prefix for block class" do
-			RailsBlocks.configure do |config|
-				config.prefix = 't-'
-			end
 
-			expect(RailsBlocks.config.prefix).to eq 't-'
-		end
-		
 		it "set path for blocks folder" do
 			RailsBlocks.configure do |config|
 				config.blocks_dir = 'bem'
@@ -63,7 +56,6 @@ describe RailsBlocks do
 	describe ".reset" do
 		before :each do
 			RailsBlocks.configure do |config|
-				config.prefix = 'test-'
 				config.blocks_dir = 'test_path'
 				config.levels = ['common', 'test']
 				config.template_engine = '.haml'
@@ -71,11 +63,6 @@ describe RailsBlocks do
 			end
 		end
 
-		it "resets the configuration prefix" do
-			RailsBlocks.reset
-			expect(RailsBlocks.config.prefix).to eq('b-')
-		end
-		
 		it "resets the configuration block_path" do
 			RailsBlocks.reset
 			expect(RailsBlocks.config.blocks_dir).to eq('app/blocks')

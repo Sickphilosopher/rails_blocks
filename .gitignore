@@ -7,9 +7,10 @@
 /pkg/
 /spec/reports/
 /tmp/
-/spec/internal/log/
+/spec/internal/log/*.log
 *.bundle
 *.so
 *.o
 *.a
 mkmf.log
+/.idea

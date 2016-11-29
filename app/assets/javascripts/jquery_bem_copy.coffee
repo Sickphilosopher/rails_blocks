@@ -442,7 +442,7 @@
 
 	$.BEM = new BEM(
 		namePattern: '[a-zA-Z0-9-]+'
-		blockPrefix: 'b-'
+		blockPrefix: ''
 		elemPrefix: '__'
 		modPrefix: '--'
 		modDlmtr: '_')

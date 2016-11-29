@@ -21,7 +21,7 @@ module RailsBlocks
 			
 			
 			def klass
-				RailsBlocks.config.prefix + @name
+				@name
 			end
 		end
 	end

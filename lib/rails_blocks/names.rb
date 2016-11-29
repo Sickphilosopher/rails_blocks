@@ -2,22 +2,30 @@ module RailsBlocks
 	module Names
 		def element_classes(b_name, e_name, options = {})
 			base_class = element_class b_name, e_name
-			classes(base_class, options)
+			classes(base_class, false, options)
 		end
 		
 		def block_classes(b_name, options = {})
 			base_class = block_class b_name
-			classes(base_class, options)
+			classes(base_class, true, options)
 		end
-		
+
+		def block_name(b_name)
+			b_name.to_s
+		end
+
+		def element_name(b_name, e_name)
+			b_name.to_s + RailsBlocks.config.element_separator + e_name.to_s
+		end
+
 		private
-			def classes(base_class, options = {})
+			def classes(base_class, add_js, options = {})
 				classes = [base_class]
 				classes |= mods_classes(base_class, options[:mods]) unless options[:mods].nil?
 				classes |= mix_classes(options[:mix], options[:parent_block]) if options[:mix]
 				classes |= Array(options[:class]) if options[:class]
-				classes << RailsBlocks.config.js_class if options[:js]
-				classes
+				classes << RailsBlocks.config.js_class if options[:js] && add_js
+				classes.uniq
 			end
 			
 			def mix_classes(mixes, context_block = nil)
@@ -48,13 +56,13 @@ module RailsBlocks
 			def mod_class(key, value)
 				value == true ? key.to_s : key.to_s + '_' + value.to_s
 			end
-			
+
 			def block_class(b_name)
-				RailsBlocks.config.prefix + b_name.to_s
+				block_name(b_name)
 			end
-			
+
 			def element_class(b_name, e_name)
-				block_class(b_name) + RailsBlocks.config.element_separator + e_name.to_s
+				element_name(b_name, e_name)
 			end
 	end
 end
