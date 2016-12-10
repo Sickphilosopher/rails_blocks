@@ -2,7 +2,6 @@ class window.Block
 	constructor: ($b, params, name) ->
 		@$node = $b
 		@name = name
-		console.log(@name)
 		@id = $$.utils.guid()
 		@params = params
 		#$.extend this, decl.methods

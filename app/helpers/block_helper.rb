@@ -70,7 +70,6 @@ module BlockHelper
 		@attrs = nil
 		@current_options = options
 		@current_entity = {type: type, name: name}
-		Rails.logger.debug "------------------------------------------------#{@current_options}-------------------------------#{@current_entity}"
 		template.nil? ? empty(content) : render(file: template, locals: {content: content, options: options})
 	end
 	
@@ -97,8 +96,6 @@ module BlockHelper
 	def bem_attrs_without_tag
 		bem_attrs.except :tag
 	end
-
-
 
 	def set_tag(tag)
 		@current_options[:tag] = tag
