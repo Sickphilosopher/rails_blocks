@@ -54,28 +54,36 @@ $bemModifierSeparator: '--'
 		#{$block}:hover
 			@content
 
-=e($element)
-	$selector: &
-	@at-root
-		@if containsModifier($selector) or containsPseudo($selector) 
-			$block: getBlock($selector)
-			#{$selector}
-				#{$block+$bemElementSeparator+$element}
-					@content
-		@else
-			#{$selector+$bemElementSeparator+$element}
-				@content
-
-=es($elements...)
+=e($elements...)
+	$selectors: ()
+	$currentSelector: &
+	
 	@each $element in $elements
-		+e($element)
-			@content
-			
-=m($modifier)
+		@if containsModifier($currentSelector) or containsPseudo($currentSelector) 
+			$block: getBlock($currentSelector)
+			$selectors: append($selectors, unquote('#{$currentSelector} #{$block+$bemElementSeparator+$element}'), 'comma')
+		@else
+			$selectors: append($selectors, unquote('#{$currentSelector+$bemElementSeparator+$element}'), 'comma')
 	@at-root
-		#{&}#{$bemModifierSeparator+$modifier}
+		#{$selectors}
 			@content
-			
+
+=m($modifiers...)
+	$selectors: ()
+	@each $modifier in $modifiers
+		$selectors: append($selectors, unquote('#{&}#{$bemModifierSeparator+$modifier}'), 'comma')
+	@at-root
+		#{$selectors}
+			@content
+
+=ms($modifiers...)
+	$selectors: null
+	@each $modifier in $modifiers
+		$selectors: $selectors#{&}#{$bemModifierSeparator+$modifier}
+	@at-root
+		#{$selectors}
+			@content
+
 =icons-m($modifiers, $width, $height)
 	@for $i from 1 through length($modifiers)
 		+m(nth($modifiers, $i))
