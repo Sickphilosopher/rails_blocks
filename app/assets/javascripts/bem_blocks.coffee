@@ -75,32 +75,3 @@ window.$$ =
 
 	elementClass: (b_name, e_name) ->
 		"#{b_name}__#{e_name}"
-
-$.fn.destroyBlocks = ->
-	@find($$.bem_class_selector).getBlocks().each ->
-		@destroy()
-
-$.fn.addMod = (name, value) ->
-	mod = $$.makeMod(name, value)
-	if @e_name
-		@addClass("#{@b_name}__#{@e_name}--#{mod}")
-	else
-		@addClass("#{@b_name}--#{mod}")
-
-$.fn.delMod = (name, value) ->
-	mod = $$.makeMod(name, value)
-	if @e_name
-		@removeClass("#{@b_name}__#{@e_name}--#{mod}")
-	else
-		@removeClass("#{@b_name}--#{mod}")
-		
-$.fn.asBlock = (name, o) ->
-	@addClass("#{name}")
-	$$.getBlock(@, name, o)
-
-$.fn.bemParams = () ->
-	allParams = @data($$.bemDataKey)
-	if @e_name
-		return allParams[$$.elementClass(@b_name, @e_name)]
-	else
-		console.log('Error, only for elements. Use initBlock for blocks.')
