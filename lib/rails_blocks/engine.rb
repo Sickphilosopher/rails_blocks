@@ -19,7 +19,7 @@ module RailsBlocks
 		
 		ActiveSupport.on_load :action_controller do
 			include RailsBlocks::Levels
-			before_filter :add_view_paths
+			before_action :add_view_paths
 		end
 		
 		rake_tasks do
