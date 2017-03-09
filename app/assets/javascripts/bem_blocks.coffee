@@ -52,7 +52,12 @@ window.$$ =
 		bid = $b.data(cacheKey)
 		if bid
 			return $$.cache[bid]
-		block = new $$.decls[$$.utils.camelCase(name)]($b, params, name)
+		try
+			block = new $$.decls[$$.utils.camelCase(name)]($b, params, name)
+		catch e
+			console.log "Can't initialize block #{name}, check declaration."
+			throw e
+
 		bid = block.id
 		$b.data cacheKey, bid
 		$$.cache[bid] = block
