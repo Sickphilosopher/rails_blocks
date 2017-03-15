@@ -104,6 +104,11 @@ module BlockHelper
 	def set_js(value)
 		@current_options[:js] = value
 	end
+
+	def set_mod(name, value)
+		@current_options[:mods] ||= {}
+		@current_options[:mods][name] = value
+	end
 	
 	private
 		def current_bem_data
