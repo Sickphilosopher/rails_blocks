@@ -55,9 +55,9 @@ class window.Block
 	
 	toggleMod: (mod, value) ->
 		if @hasMod(mod, value)
-			@$node.delMod(mod, value)
+			@delMod(mod, value)
 		else
-			@$node.addMod(mod, value)
+			@addMod(mod, value)
 
 	hasMod: (mod, value) ->
 		@$node.hasClass($$.blockModClass(@name, mod, value))
