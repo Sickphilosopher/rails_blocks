@@ -109,6 +109,12 @@ module BlockHelper
 		@current_options[:mods] ||= {}
 		@current_options[:mods][name] = value
 	end
+
+	def add_mix(mix)
+		@current_options[:mix] ||= []
+		return @current_options[:mix].push(mix) if mix.is_a? Hash
+		@current_options[:mix].push(*mix) if mix.is_a? Array
+	end
 	
 	private
 		def current_bem_data
