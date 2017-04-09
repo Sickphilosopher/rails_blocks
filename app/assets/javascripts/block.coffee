@@ -20,8 +20,10 @@ class window.Block
 		$elem.e_name = e_name
 		$elem.b_name = @name
 		$elem
-			
-		
+	
+	on: () ->
+		@$node.on.apply(@$node, arguments)
+
 	_addEvents: (element)->
 		for event_name, handler of @events
 			p = event_name.split(' ')
@@ -29,8 +31,8 @@ class window.Block
 				handler = decl.methods[handler]
 			@$node.on p[0], p[1], handler.bind(@)
 			
-	_trigger: (event) ->
-		@$node.trigger event
+	_trigger: (event, data) ->
+		@$node.trigger event, data
 
 	_elementClass: (e_name) ->
 		$$.elementClass(@name, e_name)
