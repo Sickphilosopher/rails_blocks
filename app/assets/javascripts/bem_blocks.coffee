@@ -55,8 +55,7 @@ window.$$ =
 		try
 			block = new $$.decls[$$.utils.camelCase(name)]($b, params, name)
 		catch e
-			console.log "Can't initialize block #{name}, check declaration."
-			throw e
+			console.error "Can't initialize block #{name}, check declaration. #{e.name} : #{e.message}"
 
 		bid = block.id
 		$b.data cacheKey, bid
