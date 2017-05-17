@@ -21,9 +21,9 @@ module RailsBlocks
 		private
 			def classes(base_class, add_js, options = {})
 				classes = [base_class]
-				classes |= mods_classes(base_class, options[:mods]) unless options[:mods].nil?
-				classes |= mix_classes(options[:mix], options[:parent_block]) if options[:mix]
-				classes |= Array(options[:class]) if options[:class]
+				classes.concat mods_classes(base_class, options[:mods]) unless options[:mods].nil?
+				classes.concat mix_classes(options[:mix], options[:parent_block]) if options[:mix]
+				classes.concat Array(options[:class]) if options[:class]
 				classes << RailsBlocks.config.js_class if options[:js] && add_js
 				classes.uniq
 			end
@@ -42,7 +42,7 @@ module RailsBlocks
 						raise RailsBlocks::BadMixError if mix[:b].nil?
 						block_classes(mix[:b].to_s, mix)
 					end
-				end.inject(&:|)
+				end.inject(&:concat)
 			end
 			
 			def mods_classes(base_class, mods)
