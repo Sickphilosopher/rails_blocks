@@ -12,14 +12,14 @@ class window.Block
 		@init() if @init
 	
 	elem: (e_name, mod_name, mod_value, context = @$node) ->
-		if mod_name
-			$elem = $(".#{$$.elementModClass(@name, e_name,  mod_name,  mod_value)}", context)
-		else
-			$elem = $(".#{@_elementClass(e_name)}", context)
-		 
+		$elem = $(@elemSelector.apply(@, arguments), context)
 		$elem.e_name = e_name
 		$elem.b_name = @name
 		$elem
+	
+	elemSelector: (e_name, mod_name, mod_value) ->
+		return ".#{$$.elementModClass(@name, e_name,  mod_name,  mod_value)}" if mod_name
+		".#{@_elementClass(e_name)}"
 	
 	on: () ->
 		@$node.on.apply(@$node, arguments)
