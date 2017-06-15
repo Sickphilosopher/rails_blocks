@@ -3,75 +3,62 @@ $bemModifierSeparator: '--'
 
 @function b-class($block)
 	@return ".#{$block}"
-	
-@function selectorToString($selector)
-	$selector: inspect($selector) //cast to string
-	$selector: str-slice($selector, 2, -2) //remove bracket
-	@return $selector
+
+@function e-class($block, $element)
+	@return ".#{$block+$bemElementSeparator+$element}"
+
+@function m-class($selector, $modifier)
+	@return "#{$selector+$bemModifierSeparator+$modifier}"
 
 @function containsModifier($selector)
-	$selector: selectorToString($selector)
-	@if str-index($selector, $bemModifierSeparator)
-		@return true
-	@else
-		@return false
+	$selector: inspect($selector)
+	@return if(str-index($selector, $bemModifierSeparator), true, false)
 
 @function containsPseudo($selector)
-	$selector: selectorToString($selector)
-	@if str-index($selector, ':')
-		@return true
-	@else
-		@return false
+	$selector: inspect($selector)
+	@return if(str-index($selector, ':'), true, false)
 		
 @function containsElement($selector)
-	$selector: selectorToString($selector)
-	@if str-index($selector, $bemElementSeparator)
-		@return true
-	@else
-		@return false
+	$selector: inspect($selector)
+	@return if(str-index($selector, $bemElementSeparator), true, false)
 		
 @function getBlock($selector)
-	$selector: selectorToString($selector)
+	$selector: inspect($selector)
 	$elementStart: str-index($selector, $bemElementSeparator)
 	$modifierStart: str-index($selector, $bemModifierSeparator)
 	$pseudoStart: str-index($selector, ':')
-	$start: if($elementStart, $elementStart - 1, if($modifierStart, $modifierStart - 1, $pseudoStart - 1))
-	@return str-slice($selector, 0, $start)
+	$start: if($elementStart, $elementStart - 1, if($modifierStart, $modifierStart - 1, if($pseudoStart, $pseudoStart - 1, -1)))
+	@return str-slice($selector, 2, $start) //without dot
 
-=b($block)
-	.#{$block}
+=b($blocks...)
+	$selectors: ()
+	@each $block in $blocks
+		$selectors: append($selectors, #{b-class($block)}, 'comma')
+	#{$selectors}
 		@content
-		
-=plus_b
-	@at-root
-		$block: &
-		#{$block} + #{$block}
-			@content
-			
-=hover_b
-	@at-root
-		$block: &
-		#{$block}:hover
-			@content
 
 =e($elements...)
 	$selectors: ()
-	$currentSelector: &
+	$parentSelector: &
 	
-	@each $element in $elements
-		@if containsModifier($currentSelector) or containsPseudo($currentSelector) 
-			$block: getBlock($currentSelector)
-			$selectors: append($selectors, unquote('#{$currentSelector} #{$block+$bemElementSeparator+$element}'), 'comma')
-		@else
-			$selectors: append($selectors, unquote('#{$currentSelector+$bemElementSeparator+$element}'), 'comma')
+	@each $currentSelector in $parentSelector
+		$block: getBlock($currentSelector)
+		@each $element in $elements
+			@if containsModifier($currentSelector) or containsPseudo($currentSelector) 
+				$selectors: append($selectors, #{$currentSelector e-class($block, $element)}, 'comma')
+			@else
+				$selectors: append($selectors, e-class($block, $element), 'comma')
+
 	@at-root
 		#{$selectors}
 			@content
 
 =m($modifiers...)
 	$selectors: ()
-	@each $modifier in $modifiers
-		$selectors: append($selectors, unquote('#{&}#{$bemModifierSeparator+$modifier}'), 'comma')
+	$parentSelector: &
+	@each $currentSelector in $parentSelector
+		@each $modifier in $modifiers
+			$selectors: append($selectors, m-class($currentSelector, $modifier), 'comma')
 	@at-root
 		#{$selectors}
 			@content
@@ -79,7 +66,7 @@ $bemModifierSeparator: '--'
 =ms($modifiers...)
 	$selectors: null
 	@each $modifier in $modifiers
-		$selectors: $selectors#{&}#{$bemModifierSeparator+$modifier}
+		$selectors: $selectors#{m-class(&, $modifier)}
 	@at-root
 		#{$selectors}
 			@content
@@ -94,7 +81,5 @@ $bemModifierSeparator: '--'
 				background-position: -($i - 1) * $width (-2 * $height)
 				
 @function block-image-url($level, $image)
-	$selector: &
-	$selector: selectorToString($selector)
-	$block: if(containsModifier($selector) or containsPseudo($selector) or containsElement($selector), getBlock($selector), selectorToString($selector))
+	$block: getBlock(nth(&, 1))
 	@return image-url("#{$level}/#{$block}/images/#{$image}")
