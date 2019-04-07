@@ -5,6 +5,9 @@ window.$$ =
 	bem_class_selector: ".js-bem"
 	bemDataKey: 'bem'
 
+	blockInitializationErrorHandler: (e) ->
+		console.error "Can't initialize block #{name}, check declaration. #{e.name} : #{e.message}"
+
 	processOptions: ($dom, item_name, b_name, o) ->
 		if o.attrs
 			for attr, attr_value of o.attrs
@@ -63,14 +66,13 @@ window.$$ =
 			return $$.cache[bid]
 		try
 			block = new $$.decls[$$.utils.camelCase(name)]($b, params, name)
+			bid = block.id
+			$b.data cacheKey, bid
+			$$.cache[bid] = block
+			block
 		catch e
-			console.error "Can't initialize block #{name}, check declaration. #{e.name} : #{e.message}"
-
-		bid = block.id
-		$b.data cacheKey, bid
-		$$.cache[bid] = block
-		block
-			
+			$$.blockInitializationErrorHandler(e) if $$.blockInitializationErrorHandler
+		
 	makeMod: (name, value) ->
 		mod = name
 		mod += "_#{value}" if value
