@@ -26,6 +26,12 @@ $ ->
 			else
 				return @hasClass($$.blockModClass(@b_name, name, value))
 
+		toggleMod: (mod, value) ->
+			if @hasMod(mod, value)
+				@delMod(mod, value)
+			else
+				@addMod(mod, value)
+
 		delMod: (name, value) ->
 			if @isElem()
 				@removeClass($$.elementModClass(@b_name, @e_name, name, value))
