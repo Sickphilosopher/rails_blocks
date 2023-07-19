@@ -21,4 +21,8 @@ module RailsBlocks
 	def self.reset
 		@config = Configuration.new
 	end
+
+	def self.reload_tree
+		
+	end
 end

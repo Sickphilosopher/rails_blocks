@@ -10,11 +10,13 @@ module RailsBlocks
 		end
 
 		def self.tree
-			#so slow, переделать на оновление при запросе, а не каждый раз
-			#return build_tree if Rails.env.development?
 			@tree ||= (
 				build_tree
 			)
+		end
+
+		def self.reload_tree
+			@tree = build_tree
 		end
 		
 		def self.blocks_dir
@@ -64,8 +66,11 @@ module RailsBlocks
 				files = Dir["#{blocks_dir}/**/*#{RailsBlocks.config.template_engine}"]
 				files.each do |file|
 					file.sub! blocks_dir.to_s + '/', ''
+					file.sub! '.html' + RailsBlocks.config.template_engine, ''
+					
 					parts = file.split('/')
-					filename = parts[2].sub RailsBlocks.config.template_engine, ''
+					filename = File.basename(file, RailsBlocks.config.template_engine)
+					filename = File.basename(filename, '.html')
 					template = {
 						level: parts[0],
 						block: parts[1],

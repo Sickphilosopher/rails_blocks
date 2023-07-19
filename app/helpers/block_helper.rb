@@ -1,6 +1,18 @@
 require 'rails_blocks/names'
 require 'rails_blocks/path'
 
+class RenderContext
+	attr_accessor :slots, :rendered_slots
+	def initialize
+		@slots = {}
+		@rendered_slots = {}
+	end
+
+	def slot(name, &block)
+		slots[name] = block
+	end
+end
+
 module BlockHelper
 	include RailsBlocks::Path
 	include RailsBlocks::Names
@@ -65,12 +77,14 @@ module BlockHelper
 	end
 	
 	def entity(template, type, name, options, &block)
-		content = block ? capture(&block) : options[:content]
+		ctx = RenderContext.new
+		content = block ? capture(ctx, &block) : options[:content]
+		ctx.slots.each {|k, v| ctx.rendered_slots[k] = capture(&v)}
 		#важно заполнять публичные поля только после того, как закапчюрится то, что внутри энтити, иначе они перезапишутся.
 		@attrs = nil
 		@current_options = options
 		@current_entity = {type: type, name: name}
-		template.nil? ? empty(content) : render(file: template, locals: {content: content, options: options})
+		template.nil? ? empty(content) : render(template: template, locals: {content: content, options: options, slots: ctx.rendered_slots})
 	end
 	
 	def empty(content)
