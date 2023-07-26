@@ -133,10 +133,14 @@ module BlockHelper
 	private
 		def current_bem_data
 			data = {}
-			data.merge! entity_data(current_entity_name, @current_options[:js]) if @current_options[:js]
+			if(@current_entity[:type] == :block)
+				data.merge! block_data(@current_entity[:name], @current_options[:js])
+			else
+				data.merge! element_data(context_block, @current_entity[:name], @current_options[:js])
+			end
 			data.merge! mix_data(@current_options[:mix]) if @current_options[:mix]
 
-			return nil if data == {}
+			return nil if data.length == 0
 			data
 		end
 
@@ -145,16 +149,23 @@ module BlockHelper
 			data = mixes.map do |mix|
 				next unless mix[:js]
 				if mix[:e]
-					if mix[:b]
-						entity_data(element_name(mix[:b], mix[:e]), mix[:js])
-					else
-						entity_data(element_name(context_block, mix[:e]), mix[:js])
-					end
+					element_data(mix[:b] || context_block, mix[:e], mix[:js])
 				else
 					raise RailsBlocks::BadMixError if mix[:b].nil?
-					entity_data(block_name(mix[:b]), mix[:js])
+					block_data(mix[:b], mix[:js])
 				end
 			end.compact.inject(&:merge) || {}
+		end
+
+		def block_data(name, js)
+			level = block_js_level(context_block, @current_options[:levels])
+			return {} if !js
+			data = (js == true ? {} : js).merge!({level: level})
+			entity_data(name, data)
+		end
+
+		def element_data(b, e, js)
+			entity_data(element_name(b || context_block, e), js)
 		end
 
 		def entity_data(name, data)

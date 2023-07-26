@@ -30,6 +30,12 @@ module RailsBlocks
 			end
 			nil
 		end
+
+		def block_js_level(b_name, levels)
+			return levels.reverse.find do |level|
+				Path.tree.dig(level, b_name, :js)
+			end
+		end
 		
 		def element_template(b_name, e_name, options = {})
 			options[:levels].reverse.each do |level|
@@ -41,7 +47,6 @@ module RailsBlocks
 		end
 		
 		private
-			
 			def mod(options)
 				return '' unless options[:mods] && !options[:mods].empty?
 				mod_class(*options[:mods].first)
@@ -63,30 +68,43 @@ module RailsBlocks
 			
 			def self.file_tree
 				t = {}
-				files = Dir["#{blocks_dir}/**/*#{RailsBlocks.config.template_engine}"]
+				engine_ext = RailsBlocks.config.template_engine
+				files = Dir["#{blocks_dir}/**/*#{engine_ext}"]
 				files.each do |file|
 					file.sub! blocks_dir.to_s + '/', ''
-					file.sub! '.html' + RailsBlocks.config.template_engine, ''
+					file.sub! '.html' + engine_ext, ''
 					
 					parts = file.split('/')
-					filename = File.basename(file, RailsBlocks.config.template_engine)
+					filename = File.basename(file, engine_ext)
 					filename = File.basename(filename, '.html')
-					template = {
-						level: parts[0],
-						block: parts[1],
-						file: filename
-					}
-					t[template[:level]] ||= {}
-					t[template[:level]][template[:block]] ||= {elements: {}}
+					# p filename
+					level, block = parts
+					t[level] ||= {}
+					block_def = (t[level][block] ||= {elements: {}})
 					
 					if is_e_file(filename)
-						t[template[:level]][template[:block]][:elements][get_e_name(filename)] ||= {}
-						t[template[:level]][template[:block]][:elements][get_e_name(filename)][get_e_mod(filename)] = file
+						block_def[:elements][get_e_name(filename)] ||= {}
+						block_def[:elements][get_e_name(filename)][get_e_mod(filename)] = file
 					else
-						t[template[:level]][template[:block]][get_b_mod(filename)] = file
+						block_def[get_b_mod(filename)] = file
 					end
 				end
+				add_js(t)
 				t.with_indifferent_access.freeze
+			end
+
+			def self.add_js(t)
+				js_files = Dir["#{blocks_dir}/**/*.js"]
+				js_files.each do |file|
+					file.sub! blocks_dir.to_s + '/', ''
+					parts = file.split('/')
+					level, block, filename = parts
+					filename = File.basename(filename, '.*')
+
+					t[level] ||= {}
+					block_def = t[level][block] ||= {elements: {}}
+					block_def[:js] = true
+				end
 			end
 			
 			def self.is_e_file(file)
