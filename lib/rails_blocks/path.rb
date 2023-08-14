@@ -36,6 +36,10 @@ module RailsBlocks
 				Path.tree.dig(level, b_name, :js)
 			end
 		end
+
+		def block_js_ext(b_name, level)
+			return Path.tree.dig(level, b_name, :js_ext)
+		end
 		
 		def element_template(b_name, e_name, options = {})
 			options[:levels].reverse.each do |level|
@@ -94,17 +98,21 @@ module RailsBlocks
 			end
 
 			def self.add_js(t)
-				js_files = Dir["#{blocks_dir}/**/*.js"]
+				exts = RailsBlocks.config.js_exts.join(',')
+				js_files = Dir["#{blocks_dir}/**/*.{#{exts}}"]
 				js_files.each do |file|
 					file.sub! blocks_dir.to_s + '/', ''
 					parts = file.split('/')
 					level, block, filename = parts
+					ext = File.extname(filename)
 					filename = File.basename(filename, '.*')
 
 					t[level] ||= {}
 					block_def = t[level][block] ||= {elements: {}}
 					block_def[:js] = true
+					block_def[:js_ext] = ext[1..-1]
 				end
+				p t
 			end
 			
 			def self.is_e_file(file)

@@ -160,7 +160,7 @@ module BlockHelper
 		def block_data(name, js)
 			level = block_js_level(context_block, @current_options[:levels])
 			return {} if !js
-			data = (js == true ? {} : js).merge!({level: level})
+			data = (js == true ? {} : js).merge!({level: level, js_ext: block_js_ext(context_block, level)})
 			entity_data(name, data)
 		end
 
