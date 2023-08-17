@@ -35,7 +35,7 @@ module BlockHelper
 	def b(b_name, options = {}, &block)
 		options = page_options.merge options
 		options[:parent_block] = context_block
-		push_context_block b_name
+		push_context_block b_name, options
 		template = block_template b_name, options
 		result = entity(template, :block, b_name, options, &block)
 		pop_context_block
@@ -44,7 +44,7 @@ module BlockHelper
 	
 	def b_classes(b_name, options = {})
 		parent_block = context_block
-		push_context_block b_name
+		push_context_block b_name, options
 		options = page_options.merge options
 		options[:parent_block] = parent_block if parent_block
 		classes = block_classes b_name, options
@@ -52,8 +52,8 @@ module BlockHelper
 		classes
 	end
 	
-	def b_context(b_name, &block)
-		push_context_block b_name
+	def b_context(b_name, options = {}, &block)
+		push_context_block b_name, options
 		result = capture(&block)
 		pop_context_block
 		result
@@ -169,7 +169,10 @@ module BlockHelper
 		end
 
 		def entity_data(name, data)
-			return {name => data} if data.is_a? Hash
+			if data.is_a? Hash
+				transformed_data = data.transform_keys {|k| k.to_s.camelize(:lower)}
+				return {name => transformed_data}
+			end
 			return {name => {}} if data == true
 			{}
 		end
@@ -189,11 +192,15 @@ module BlockHelper
 		end
 		
 		def context_block
-			blocks_stack.last
+			blocks_stack.last&.fetch(:name, nil)
+		end
+
+		def context_block_options
+			blocks_stack.last&.fetch(:options, nil)
 		end
 		
-		def push_context_block(b_name)
-			blocks_stack.push b_name
+		def push_context_block(b_name, options)
+			blocks_stack.push({name: b_name, options: options})
 		end
 		
 		def pop_context_block
